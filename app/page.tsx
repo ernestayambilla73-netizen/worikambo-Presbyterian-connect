@@ -1,0 +1,19 @@
+const sections = [
+  { icon: "⛪", title: "Our Congregations", text: "Find and connect with congregations across the Worikambo District." },
+  { icon: "📣", title: "Announcements", text: "Stay informed about church notices and district updates." },
+  { icon: "🗓️", title: "Events & Programmes", text: "Keep up with worship services, meetings and upcoming programmes." },
+  { icon: "📖", title: "Daily Devotional", text: "Make space for scripture, reflection and prayer." },
+  { icon: "🖼️", title: "Gallery", text: "Remember the fellowship and special moments we share together." },
+  { icon: "🤝", title: "Member Area", text: "A place for church members to connect and access member resources." },
+];
+export default function Home() {
+ return <main>
+  <nav className="nav"><a className="brand" href="#"><span className="cross">✝</span><span>WORIKAMBO<br/><b>PRESBYTERIAN CONNECT</b></span></a><div className="navlinks"><a href="#about">About</a><a href="#connect">Congregations</a><a href="#updates">Updates</a><a className="navbutton" href="#contact">Contact us</a></div></nav>
+  <section className="hero"><div className="hero-content"><span className="eyebrow">PRESBYTERIAN CHURCH OF GHANA · WORIKAMBO DISTRICT</span><h1>Growing in faith.<br/><em>Connected in Christ.</em></h1><p>A welcoming digital home for our congregations, members and friends. Discover what is happening across our district and grow with us in faith and fellowship.</p><div className="actions"><a className="primary" href="#connect">Explore our district <span>→</span></a><a className="secondary" href="#about">Who we are</a></div><div className="hero-note"><span className="dot"/> Faith · Fellowship · Service</div></div><div className="hero-art" aria-label="Decorative church illustration"><div className="sun"/><div className="hill hill1"/><div className="hill hill2"/><div className="church"><div className="steeple">✝</div><div className="roof"/><div className="building"><div className="window"/> <div className="door"/><div className="window"/></div></div><div className="art-caption">“Serve the Lord with gladness.”<small>Psalm 100:2</small></div></div></section>
+  <section className="welcome" id="about"><span className="eyebrow">WELCOME TO OUR DISTRICT</span><h2>One church family, many ways to connect.</h2><p>Our district brings people together through worship, discipleship, community service and the love of Christ. This platform is being built to help every congregation stay connected.</p></section>
+  <section className="cards-section" id="connect"><div className="section-heading"><div><span className="eyebrow">EXPLORE & CONNECT</span><h2>Find your place in our community</h2></div><p>Everything you need to stay connected with district life.</p></div><div className="cards">{sections.map(s=><article className="card" key={s.title}><div className="card-icon">{s.icon}</div><h3>{s.title}</h3><p>{s.text}</p><a href="#contact">Learn more <span>→</span></a></article>)}</div></section>
+  <section className="verse" id="updates"><span className="verse-mark">“</span><blockquote>How good and pleasant it is when God’s people live together in unity!</blockquote><p>PSALM 133:1</p></section>
+  <section className="contact" id="contact"><div><span className="eyebrow">LET'S STAY CONNECTED</span><h2>We would love to hear from you.</h2><p>Reach out to the Worikambo District with questions, prayer requests or information about our congregations.</p></div><a className="primary" href="mailto:info@worikambopresbyterian.org">Contact the district <span>→</span></a></section>
+  <footer><a className="brand footer-brand" href="#"><span className="cross">✝</span><span>WORIKAMBO<br/><b>PRESBYTERIAN CONNECT</b></span></a><p>Presbyterian Church of Ghana · Worikambo District</p><small>Built to bring our church family closer together.</small></footer>
+ </main>;
+}
