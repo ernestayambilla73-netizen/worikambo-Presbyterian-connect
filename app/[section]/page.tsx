@@ -3,10 +3,10 @@ type Props={params:Promise<{section:string}>};
 type MinistryLogo={src?:string;label:string;alt:string};
 const ministryLogos:Record<string,MinistryLogo>={
   "Children's Service":{label:"CS",alt:"Children’s Service ministry emblem"},
-  "Junior Youth (JY)":{label:"JY",alt:"Presbyterian Junior Youth logo"},
+  "Junior Youth (JY)":{src:"https://osueben-ezer.com/assets/img/JYlogo.png",label:"JY",alt:"Presbyterian Junior Youth official emblem"},
   "Young People's Guild (YPG)":{src:"https://www.pcgypg.org/images/pcg-logo-lg.png",label:"YPG",alt:"Young People’s Guild official crest"},
-  "Young Adults' Fellowship (YAF)":{label:"YAF",alt:"Young Adults’ Fellowship ministry emblem"},
-  "Women's Fellowship":{label:"WF",alt:"Women’s Fellowship ministry emblem"},
+  "Young Adults' Fellowship (YAF)":{src:"https://www.osueben-ezer.com/assets/img/YAFogo.png",label:"YAF",alt:"Presbyterian Young Adults’ Fellowship official emblem"},
+  "Women's Fellowship":{src:"https://clipground.com/images/presbyterian-church-of-ghana-logo-clipart-1.png",label:"WF",alt:"Presbyterian Women’s Fellowship emblem"},
   "Men's Fellowship":{label:"MF",alt:"Men’s Fellowship ministry emblem"},
   "Bible & Prayer Group":{label:"BPG",alt:"Bible and Prayer Group ministry emblem"},
   "Singing Band & Choir":{label:"SBC",alt:"Singing Band and Choir ministry emblem"}
