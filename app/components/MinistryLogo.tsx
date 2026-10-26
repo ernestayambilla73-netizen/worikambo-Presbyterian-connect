@@ -12,7 +12,7 @@ export default function MinistryLogo({ src, label, alt }: Props) {
   if (!src || failed) {
     return (
       <span className="ministry-logo ministry-logo-monogram" role="img" aria-label={alt}>
-        {failed ? "Logo unavailable" : "Official logo pending"}
+        {failed ? "Logo unavailable" : `${label} logo pending`}
       </span>
     );
   }
