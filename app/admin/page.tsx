@@ -29,7 +29,6 @@ export default function AdminDashboard() {
  const supabase = useMemo(() => createClient(), []);
  const [session, setSession] = useState<any>(null);
  const [email, setEmail] = useState("");
- const [creatingAccount, setCreatingAccount] = useState(false);
  const [password, setPassword] = useState("");
  const [authorized, setAuthorized] = useState(false);
  const [checking, setChecking] = useState(true);
@@ -86,7 +85,7 @@ export default function AdminDashboard() {
   setBusy(true); setError(""); setNotice("");
   const {error} = await supabase.auth.signUp({email:email.trim(),password});
   if (error) setError(error.message);
-  else { setNotice("Account request submitted. Verify your email if requested, then ask the project owner to grant administrator access. Registration alone does not grant privileges."); setCreatingAccount(false); }
+  else { setNotice("Account request submitted. Verify your email if requested, then ask the project owner to grant administrator access. Registration alone does not grant privileges."); }
   setBusy(false);
  }
  async function signOut() { await supabase.auth.signOut(); setAuthorized(false); setSession(null); setRows([]); setNotice("Signed out."); }
