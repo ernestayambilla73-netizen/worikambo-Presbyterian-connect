@@ -47,10 +47,13 @@ export default function InstallApp() {
       const choice = await installEvent.userChoice;
       setInstallEvent(null);
       setMessage(choice.outcome === "accepted" ? "Thanks — follow the browser prompts to finish installing." : "Installation was cancelled. You can try again any time.");
+      if (choice.outcome === "accepted") setInstalled(true);
       return;
     }
     setMessage("On Android, open your browser menu (⋮) and choose “Install app” or “Add to Home screen”. If that option is missing, open this site in Chrome and try again after the page finishes loading.");
   }
+
+  if (installed) return null;
 
   return <aside className="install-app" aria-label="Install app">
     <div className="install-app-copy"><img src="/pcg-connect-mark.svg" alt="" width="38" height="38"/><span><strong>Take the church with you</strong><small>Install Presbyterian Connect on your phone</small></span></div>
