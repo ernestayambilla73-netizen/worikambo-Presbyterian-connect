@@ -29,6 +29,7 @@ export default function AdminDashboard() {
  const supabase = useMemo(() => createClient(), []);
  const [session, setSession] = useState<any>(null);
  const [email, setEmail] = useState("");
+ const [creatingAccount, setCreatingAccount] = useState(false);
  const [password, setPassword] = useState("");
  const [authorized, setAuthorized] = useState(false);
  const [checking, setChecking] = useState(true);
@@ -81,6 +82,13 @@ export default function AdminDashboard() {
   if (error) setError(error.message);
   setBusy(false);
  }
+ async function createAccount() {
+  setBusy(true); setError(""); setNotice("");
+  const {error} = await supabase.auth.signUp({email:email.trim(),password});
+  if (error) setError(error.message);
+  else { setNotice("Account request submitted. Verify your email if requested, then ask the project owner to grant administrator access. Registration alone does not grant privileges."); setCreatingAccount(false); }
+  setBusy(false);
+ }
  async function signOut() { await supabase.auth.signOut(); setAuthorized(false); setSession(null); setRows([]); setNotice("Signed out."); }
  function startNew() { setDraft(blank(module)); setEditing(true); setError(""); setNotice(""); }
  function startEdit(row: Row) {
@@ -110,7 +118,7 @@ export default function AdminDashboard() {
  }
 
  if (checking) return <main className="admin-shell"><div className="container"><div className="admin-panel">Checking administrator session…</div></div></main>;
- if (!authorized) return <main className="admin-shell"><div className="container admin-container"><section className="admin-panel admin-auth"><span className="eyebrow">WORIKAMBO PRESBYTERIAN CONNECT</span><h1>Administrator sign in</h1><p>Sign in with your Supabase account. Only accounts explicitly approved in the church administrator list can manage website content.</p><form onSubmit={signIn} className="admin-form"><label>Email address<input type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="username" required /></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required /></label><button className="btn" disabled={busy}>{busy ? "Signing in…" : "Sign in securely"}</button></form>{error && <p className="admin-error" role="alert">{error}</p>}<p className="admin-muted">No administrator account has been registered in this project yet. The first administrator must be approved by the project owner after creating a Supabase Auth account.</p></section></div></main>;
+ if (!authorized) return <main className="admin-shell"><div className="container admin-container"><section className="admin-panel admin-auth"><span className="eyebrow">WORIKAMBO PRESBYTERIAN CONNECT</span><h1>Administrator sign in</h1><p>Sign in with your Supabase account. Only accounts explicitly approved in the church administrator list can manage website content.</p><form onSubmit={signIn} className="admin-form"><label>Email address<input type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="username" required /></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required /></label><button className="btn" disabled={busy}>{busy ? "Please wait…" : "Sign in securely"}</button><button type="button" className="admin-link-button" disabled={busy} onClick={createAccount}>Create an account for approval</button></form>{notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}<p className="admin-muted">Creating an account does not make you an administrator. Access is granted separately by the project owner.</p></section></div></main>;
 
  return <main className="admin-shell"><div className="container admin-container">
   <div className="admin-top"><div><span className="eyebrow">CONTROL CENTRE</span><h1>Website administration</h1><p>Signed in as {session.email}. Changes are stored in Supabase PostgreSQL.</p></div><button className="btn btn-secondary" onClick={signOut}>Sign out</button></div>
