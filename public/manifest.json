@@ -1,9 +1,19 @@
 {
   "name": "Worikambo Presbyterian Connect",
   "short_name": "Presby Connect",
-  "description": "Presbyterian Church of Ghana, Worikambo District",
+  "description": "Presbyterian Church of Ghana — Worikambo District",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#faf8f1",
-  "theme_color": "#143b35"
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#173f98",
+  "icons": [
+    {
+      "src": "/pcg-connect-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
