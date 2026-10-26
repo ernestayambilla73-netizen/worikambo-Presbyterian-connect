@@ -133,3 +133,21 @@
 .member-group-actions button.danger{color:#b42323}
 @media(max-width:980px){.member-toolbar{grid-template-columns:1fr 1fr}.member-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.member-top{flex-direction:column}.member-top-actions{width:100%}.member-top-actions .btn{flex:1}.member-panel{padding:14px}.member-tabs{overflow-x:auto}.member-tabs button{white-space:nowrap}.member-toolbar{grid-template-columns:1fr}.member-form-grid{grid-template-columns:1fr}.member-form-grid .member-wide{grid-column:auto}.member-groups-heading{flex-direction:column}.member-group-card{align-items:flex-start;flex-wrap:wrap}.member-group-main{min-width:calc(100% - 60px)}.member-group-actions{width:100%;padding-left:56px}.member-stats>div{padding:14px}.member-stats strong{font-size:24px}}
+
+/* News and photo gallery polish */
+.admin-fields input[type=file]{width:100%;border:1px dashed #b7c6e6;border-radius:10px;padding:14px;background:#f4f7ff;color:#33496f;font-size:12px}
+.news-card{padding:0;overflow:hidden}
+.news-cover{display:block;width:100%;height:205px;object-fit:cover;background:#edf2fb}
+.news-card-copy{padding:23px}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.gallery-card{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.gallery-card:hover{transform:translateY(-4px);box-shadow:0 20px 42px #142d6314}
+.gallery-image-link{display:block;overflow:hidden;background:#edf2fb;aspect-ratio:4/3}
+.gallery-image-link img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .35s}
+.gallery-card:hover .gallery-image-link img{transform:scale(1.035)}
+.gallery-card-copy{padding:20px}
+.gallery-card-copy h3{margin:8px 0;color:var(--blue-deep);font-size:18px;line-height:1.35}
+.gallery-card-copy p{margin:0 0 10px;color:var(--muted);font-size:13px;line-height:1.8}
+.gallery-card-copy small{font-size:11px;color:#7b879b}
+@media(max-width:850px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.gallery-grid{grid-template-columns:1fr}.gallery-image-link{aspect-ratio:16/10}.news-cover{height:185px}}
