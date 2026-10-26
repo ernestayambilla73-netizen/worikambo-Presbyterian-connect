@@ -68,3 +68,12 @@
 .ministry-logo-wrap{width:100%;min-height:112px}
 .ministry-logo{max-width:100%;max-height:104px}
 @media(max-width:640px){.ministry-welcome{padding:22px 20px;border-radius:18px}}
+
+
+/* App identity and install controls */
+.brand-image{display:block;flex:0 0 49px;width:49px;height:49px;object-fit:contain;border-radius:14px;box-shadow:0 8px 18px #173f9824}
+.site-footer .brand-image{box-shadow:0 10px 24px #0003}
+.install-app{position:fixed;z-index:80;right:18px;bottom:18px;width:min(410px,calc(100vw - 28px));padding:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;background:rgba(255,255,255,.97);border:1px solid #dbe4f5;border-radius:18px;box-shadow:0 16px 48px #102b6828;backdrop-filter:blur(14px)}
+.install-app-copy{display:flex;align-items:center;gap:10px;min-width:0}.install-app-copy img{flex-shrink:0;border-radius:10px}.install-app-copy strong,.install-app-copy small{display:block}.install-app-copy strong{font-size:12px;line-height:1.35;color:#102b68}.install-app-copy small{font-size:10px;line-height:1.4;color:#657087;margin-top:3px}
+.install-app-button{border:0;border-radius:11px;background:#173f98;color:#fff;padding:11px 13px;font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer}.install-app-button:hover{background:#102b68}.install-app-message{grid-column:1/-1;margin:0;padding:9px 10px;border-radius:9px;background:#f0f4ff;color:#354d80;font-size:11px;line-height:1.6}
+@media(max-width:640px){.brand-image{width:43px;height:43px;flex-basis:43px}.install-app{right:10px;bottom:10px;width:calc(100vw - 20px);padding:11px;gap:8px}.install-app-copy strong{font-size:11px}.install-app-copy small{font-size:9px}.install-app-button{padding:10px;font-size:10px}}
