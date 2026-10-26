@@ -26,18 +26,24 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <Brand />
       <nav className="nav-links" aria-label="Main navigation">
         {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
-        <a className="nav-cta" href="/contact">Plan a Visit</a>
+        <a className="nav-cta" href="/contact">Plan a Visit <span aria-hidden="true">↗</span></a>
       </nav>
     </div></header>
     {children}
-    <footer className="site-footer"><div className="container">
-      <div className="footer-grid">
-        <div><Brand/><p style={{marginTop:16,maxWidth:270}}>Faith, fellowship and service across the Worikambo Presbyterian District.</p></div>
-        <div><h3>Explore</h3><div className="footer-links"><a href="/about">About the District</a><a href="/congregations">Congregations</a><a href="/ministries">Church Groups</a><a href="/events">Events & Programmes</a></div></div>
-        <div><h3>Resources</h3><div className="footer-links"><a href="/devotional">Daily Devotional</a><a href="/hymns">Hymns & Liturgy</a><a href="/sermons">Sermons</a><a href="/news">Church News</a></div></div>
-        <div><h3>Get in touch</h3><div className="footer-links"><a href="/contact">Contact the District</a><a href="/contact#prayer">Prayer request</a><a href="/admin">Administration sign-in</a><a href="https://pcgonline.org/" target="_blank" rel="noreferrer">PCG official website ↗</a></div></div>
+    <footer className="site-footer">
+      <div className="footer-glow" aria-hidden="true" />
+      <div className="container footer-content">
+        <div className="footer-feature">
+          <div className="footer-brand-block"><Brand /><span className="footer-kicker">FAITH · FELLOWSHIP · SERVICE</span></div>
+          <p className="footer-mission">A connected church family, growing in faith and serving our communities across the Worikambo Presbyterian District.</p>
+          <a className="footer-contact-cta" href="/contact"><span className="footer-cta-icon">↗</span><span><strong>Connect with us</strong><small>We would love to hear from you</small></span></a>
+        </div>
+        <div className="footer-column"><span className="footer-heading">Discover</span><a href="/about">About the District</a><a href="/congregations">Our Congregations</a><a href="/ministries">Church Groups & Ministries</a><a href="/events">Events & Programmes</a></div>
+        <div className="footer-column"><span className="footer-heading">Faith resources</span><a href="/devotional">Daily Devotional</a><a href="/hymns">Hymns & Liturgy</a><a href="/sermons">Sermons & Messages</a><a href="/news">News & Announcements</a></div>
+        <div className="footer-column"><span className="footer-heading">Helpful links</span><a href="/contact">Contact the District</a><a href="/contact#prayer">Prayer requests</a><a href="/admin">Administrator sign-in</a><a href="https://pcgonline.org/" target="_blank" rel="noreferrer">Presbyterian Church of Ghana <span aria-hidden="true">↗</span></a></div>
+        <div className="footer-scripture"><span className="footer-cross" aria-hidden="true">✝</span><div><span className="footer-heading">Our shared calling</span><blockquote>“That they all may be one.”</blockquote><span className="footer-verse">JOHN 17:21</span></div></div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} Worikambo Presbyterian Connect. All rights reserved.</span><span className="footer-bottom-right"><span className="footer-dot" /> Built for faith, community & connection <span className="footer-dot red" /></span></div>
       </div>
-      <div className="footer-bottom"><span>© {new Date().getFullYear()} Worikambo Presbyterian Connect</span><span>That They All May Be One · John 17:21</span></div>
-    </div></footer>
+    </footer>
   </body></html>;
 }
