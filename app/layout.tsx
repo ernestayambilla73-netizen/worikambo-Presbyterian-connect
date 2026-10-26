@@ -27,7 +27,7 @@ function Brand() {
 
 const nav = [
   ["Home", "/"], ["About", "/about"], ["Congregations", "/congregations"],
-  ["Ministries", "/ministries"], ["Resources", "/resources"], ["News", "/news"], ["Events", "/events"]
+  ["Ministries", "/ministries"], ["Resources", "/resources"], ["News", "/news"], ["Gallery", "/gallery"], ["Events", "/events"]
 ];
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
