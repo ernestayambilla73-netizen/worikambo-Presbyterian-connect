@@ -9,7 +9,8 @@ const ministryLogos:Record<string,MinistryLogo>={
   "Women's Fellowship":{src:"https://clipground.com/images/presbyterian-church-of-ghana-logo-clipart-1.png",label:"WF",alt:"Presbyterian Women’s Fellowship emblem"},
   "Men's Fellowship":{label:"MF",alt:"Men’s Fellowship ministry emblem"},
   "Bible & Prayer Group":{label:"BPG",alt:"Bible and Prayer Group ministry emblem"},
-  "Singing Band & Choir":{label:"SBC",alt:"Singing Band and Choir ministry emblem"}
+  "Singing Band & Choir":{label:"SBC",alt:"Singing Band and Choir ministry emblem"},
+  "Other ministries":{label:"OM",alt:"Other Presbyterian ministries emblem"}
 };
 const data:Record<string,{title:string;intro:string;cards:{icon:string;title:string;text:string;href:string}[]}>={
 about:{title:"About the District",intro:"A shared home for worship, discipleship, fellowship and service throughout the Worikambo Presbyterian District.",cards:[{icon:"✝",title:"Our purpose",text:"Help congregations communicate clearly, welcome visitors and keep members informed.",href:"/ministries"},{icon:"♡",title:"Our values",text:"Worship rooted in Scripture, discipleship for every generation, service and unity.",href:"/ministries"}]},
