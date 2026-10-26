@@ -83,7 +83,7 @@ export default function AdminDashboard() {
  }
  async function createAccount() {
   setBusy(true); setError(""); setNotice("");
-  const {error} = await supabase.auth.signUp({email:email.trim(),password});
+  const {error} = await supabase.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:`${window.location.origin}/admin`}});
   if (error) setError(error.message);
   else { setNotice("Account request submitted. Verify your email if requested, then ask the project owner to grant administrator access. Registration alone does not grant privileges."); }
   setBusy(false);
