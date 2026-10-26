@@ -3,14 +3,14 @@ import MinistryLogo from "../components/MinistryLogo";
 type Props={params:Promise<{section:string}>};
 type MinistryLogo={src?:string;label:string;alt:string};
 const ministryLogos:Record<string,MinistryLogo>={
-  "Children's Service":{label:"CS",alt:"Children’s Service ministry emblem"},
+  "Children's Service":{src:"https://static.wixstatic.com/media/8d370a_1154dcfd27854c85b68946c94d41426b~mv2.png/v1/fill/w_640%2Ch_586%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/shutterstock_1898354080.png",label:"CS",alt:"Presbyterian Children’s Service emblem"},
   "Junior Youth (JY)":{src:"https://osueben-ezer.com/assets/img/JYlogo.png",label:"JY",alt:"Presbyterian Junior Youth official emblem"},
-  "Young People's Guild (YPG)":{src:"https://www.pcgypg.org/images/pcg-logo-lg.png",label:"YPG",alt:"Young People’s Guild official crest"},
+  "Young People's Guild (YPG)":{src:"https://pcgypg.org/images/pcg-logo-lg.png",label:"YPG",alt:"Young People’s Guild official crest"},
   "Young Adults' Fellowship (YAF)":{src:"https://www.osueben-ezer.com/assets/img/YAFogo.png",label:"YAF",alt:"Presbyterian Young Adults’ Fellowship official emblem"},
   "Women's Fellowship":{src:"https://clipground.com/images/presbyterian-church-of-ghana-logo-clipart-1.png",label:"WF",alt:"Presbyterian Women’s Fellowship emblem"},
-  "Men's Fellowship":{label:"MF",alt:"Men’s Fellowship ministry emblem"},
+  "Men's Fellowship":{src:"https://images.seeklogo.com/logo-png/52/1/the-presbyterian-church-men-fellowship-logo-png_seeklogo-522978.png",label:"MF",alt:"Presbyterian Church Men’s Fellowship emblem"},
   "Bible & Prayer Group":{label:"BPG",alt:"Bible and Prayer Group ministry emblem"},
-  "Singing Band & Choir":{label:"SBC",alt:"Singing Band and Choir ministry emblem"},
+  "Singing Band & Choir":{src:"https://www.pngitem.com/pimgs/m/518-5181372_presbyterian-church-ghana-singing-band-logo-hd-png.png",label:"SBC",alt:"Presbyterian Church Ghana Singing Band emblem"},
   "Other ministries":{label:"OM",alt:"Other Presbyterian ministries emblem"}
 };
 const data:Record<string,{title:string;intro:string;cards:{icon:string;title:string;text:string;href:string}[]}>={
