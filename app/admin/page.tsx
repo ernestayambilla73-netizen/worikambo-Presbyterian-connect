@@ -11,8 +11,8 @@ const modules: Module[] = [
  { label: "Congregations", table: "church_congregations", key: "id", columns: ["name","community","service_times","is_published"], fields: [
   {key:"name",label:"Congregation name",required:true},{key:"community",label:"Community"},{key:"address",label:"Address"},{key:"service_times",label:"Worship times",type:"textarea"},{key:"contact_name",label:"Contact person"},{key:"contact_phone",label:"Contact phone"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
  { label: "News & events", table: "church_posts", key: "id", columns: ["post_type","title","event_date","is_published"], fields: [
-  {key:"post_type",label:"Content type",type:"select",options:["news","event","sermon","devotional"],required:true},{key:"title",label:"Title",required:true},{key:"body",label:"Content",type:"textarea"},{key:"event_date",label:"Event/date",type:"datetime-local"},{key:"venue",label:"Venue"},{key:"source_url",label:"Audio/video/source URL"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
- { label: "Hymns & resources", table: "church_resources", key: "id", columns: ["title","resource_type","url","is_published"], fields: [
+  {key:"post_type",label:"Content type",type:"select",options:["news","event","sermon","devotional"],required:true},{key:"title",label:"Title",required:true},{key:"body",label:"Content",type:"textarea"},{key:"image_url",label:"News cover image (upload)",type:"image"},{key:"event_date",label:"Event/date",type:"datetime-local"},{key:"venue",label:"Venue"},{key:"source_url",label:"Audio/video/source URL"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
+ { label: "Gallery", table: "church_gallery", key: "id", columns: ["title","album","event_date","is_published"], fields: [\n  {key:"title",label:"Photo title",required:true},{key:"caption",label:"Caption / story",type:"textarea"},{key:"album",label:"Album / category",required:true},{key:"event_date",label:"Event date",type:"date"},{key:"image_url",label:"Photo (upload image)",type:"image",required:true},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},\n { label: "Hymns & resources", table: "church_resources", key: "id", columns: ["title","resource_type","url","is_published"], fields: [
   {key:"title",label:"Resource title",required:true},{key:"resource_type",label:"Resource type",type:"select",options:["hymn_link","liturgy_link","course_material","other"],required:true},{key:"url",label:"Authorised resource URL"},{key:"notes",label:"Notes",type:"textarea"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
  { label: "Church courses", table: "church_courses", key: "id", private: true, columns: ["title","course_date","materials_url"], fields: [
   {key:"title",label:"Course title",required:true},{key:"description",label:"Description",type:"textarea"},{key:"course_date",label:"Course date",type:"date"},{key:"materials_url",label:"Materials URL"}]},
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
  const [busy, setBusy] = useState(false);
  const [notice, setNotice] = useState("");
  const [error, setError] = useState("");
- const [counts, setCounts] = useState<Record<string,number>>({});
+ const [counts, setCounts] = useState<Record<string,number>>({});\n const [mediaFiles, setMediaFiles] = useState<Record<string,File>>({});
  const module = modules[active];
 
  const checkAccess = useCallback(async (user: any) => {
@@ -89,23 +89,33 @@ export default function AdminDashboard() {
   setBusy(false);
  }
  async function signOut() { await supabase.auth.signOut(); setAuthorized(false); setSession(null); setRows([]); setNotice("Signed out."); }
- function startNew() { setDraft(blank(module)); setEditing(true); setError(""); setNotice(""); }
+ function startNew() { setDraft(blank(module)); setMediaFiles({}); setEditing(true); setError(""); setNotice(""); }
  function startEdit(row: Row) {
   const copy = {...row};
   if (copy.event_date) copy.event_date = String(copy.event_date).slice(0,16);
   if (copy.course_date) copy.course_date = String(copy.course_date).slice(0,10);
-  setDraft(copy); setEditing(true); setError(""); setNotice("");
+  setDraft(copy); setMediaFiles({}); setEditing(true); setError(""); setNotice("");
  }
  async function save(e: React.FormEvent) {
   e.preventDefault(); setBusy(true); setError(""); setNotice("");
   const payload:Row = {...draft};
+  for (const f of module.fields) if (f.type === "image" && mediaFiles[f.key]) {
+   const file = mediaFiles[f.key];
+   const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,"-");
+   const path = `${module.table}/${session.id}/${Date.now()}-${safeName}`;
+   const {error:uploadError} = await supabase.storage.from("church-gallery").upload(path,file,{upsert:false,contentType:file.type});
+   if (uploadError) { setError("Image upload failed: " + uploadError.message); setBusy(false); return; }
+   payload[f.key] = supabase.storage.from("church-gallery").getPublicUrl(path).data.publicUrl;
+  }
   for (const f of module.fields) if (f.type === "datetime-local" && payload[f.key]) payload[f.key] = new Date(payload[f.key]).toISOString();
-  if (module.table === "church_posts" && payload.is_published && !payload.published_at) payload.published_at = new Date().toISOString();
+  if (module.table === "church_posts" && payload.is_published) payload.published_at = new Date().toISOString();
+  if (module.table === "church_posts" && !payload.is_published) payload.published_at = null;
+  if (module.table === "church_gallery") payload.updated_at = new Date().toISOString();
   if (module.table === "church_page_content") { payload.updated_by = session.id; payload.updated_at = new Date().toISOString(); }
   else if (module.table !== "church_congregations" && module.table !== "church_ministries") payload.created_by = session.id;
   const {error} = await supabase.from(module.table).upsert(payload, {onConflict:module.key});
   if (error) setError(error.message);
-  else { setNotice("Saved to the Presbyterian Connect database."); setEditing(false); await load(); }
+  else { setNotice("Saved to the Presbyterian Connect database."); setEditing(false); setMediaFiles({}); await load(); }
   setBusy(false);
  }
  async function remove(row: Row) {
@@ -123,9 +133,9 @@ export default function AdminDashboard() {
   <div className="admin-top"><div><span className="eyebrow">CONTROL CENTRE</span><h1>Website administration</h1><p>Signed in as {session.email}. Changes are stored in Supabase PostgreSQL.</p></div><button className="btn btn-secondary" onClick={signOut}>Sign out</button></div>
   <div className="admin-summary">{modules.map(m=><button key={m.table} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table] ?? "—"}</strong><span>{m.label}</span></button>)}</div>
   <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register &amp; age groups ↗</a>{modules.map((m,i)=><button key={m.table} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
-   <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
+   <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? "Upload church photos, add captions and publish them to the public Gallery." : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
     {notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}
-    {editing && <form className="admin-editor" onSubmit={save}><div className="admin-editor-head"><h3>{draft[module.key] ? "Edit record" : "Create record"}</h3><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Cancel</button></div><div className="admin-fields">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"wide":""}>{f.label}{f.type==="textarea" ? <textarea value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/> : f.type==="checkbox" ? <input type="checkbox" checked={!!draft[f.key]} onChange={e=>setDraft({...draft,[f.key]:e.target.checked})}/> : f.type==="select" ? <select value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}><option value="">Choose…</option>{f.options?.map(o=><option key={o} value={o}>{o.replaceAll("_"," ")}</option>)}</select> : <input type={f.type ?? "text"} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required} readOnly={f.key===module.key && !!draft[f.key] && module.key==="slug"}/>}</label>)}</div><button className="btn" disabled={busy}>{busy?"Saving…":"Save changes"}</button></form>}
+    {editing && <form className="admin-editor" onSubmit={save}><div className="admin-editor-head"><h3>{draft[module.key] ? "Edit record" : "Create record"}</h3><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Cancel</button></div><div className="admin-fields">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"wide":""}>{f.label}{f.type==="textarea" ? <textarea value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/> : f.type==="image" ? <><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file){if(file.size>10*1024*1024){setError("Choose an image smaller than 10 MB.");e.currentTarget.value="";return;}setMediaFiles({...mediaFiles,[f.key]:file});setError("");}}} required={!!f.required && !draft[f.key]}/>{(mediaFiles[f.key]||draft[f.key])&&<small>{mediaFiles[f.key]?.name || "Current image saved"}{draft[f.key]&&!mediaFiles[f.key]&&<> · <a href={draft[f.key]} target="_blank" rel="noreferrer">View current image</a></>}</small>}</> : f.type==="checkbox" ? <input type="checkbox" checked={!!draft[f.key]} onChange={e=>setDraft({...draft,[f.key]:e.target.checked})}/> : f.type==="select" ? <select value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}><option value="">Choose…</option>{f.options?.map(o=><option key={o} value={o}>{o.replaceAll("_"," ")}</option>)}</select> : <input type={f.type ?? "text"} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required} readOnly={f.key===module.key && !!draft[f.key] && module.key==="slug"}/>}</label>)}</div><button className="btn" disabled={busy}>{busy?"Saving…":"Save changes"}</button></form>}
     <div className="admin-table-wrap">{busy && <p className="admin-muted">Loading…</p>}<table className="data-table"><thead><tr>{module.columns.map(c=><th key={c}>{c.replaceAll("_"," ")}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row[module.key]}>{module.columns.map(c=><td key={c}>{display(row[c])}</td>)}<td><div className="admin-row-actions"><button onClick={()=>startEdit(row)}>Edit</button><button className="danger" onClick={()=>remove(row)}>Delete</button></div></td></tr>)}{!rows.length && !busy && <tr><td colSpan={module.columns.length+1}>No records yet. Select “Add new” to create the first one.</td></tr>}</tbody></table></div>
    </section>
   </div>
