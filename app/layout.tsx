@@ -40,8 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </div>
         <div className="footer-column"><span className="footer-heading">Discover</span><a href="/about">About the District</a><a href="/congregations">Our Congregations</a><a href="/ministries">Church Groups & Ministries</a><a href="/events">Events & Programmes</a></div>
         <div className="footer-column"><span className="footer-heading">Faith resources</span><a href="/devotional">Daily Devotional</a><a href="/hymns">Hymns & Liturgy</a><a href="/sermons">Sermons & Messages</a><a href="/news">News & Announcements</a></div>
-        <div className="footer-column"><span className="footer-heading">Helpful links</span><a href="/contact">Contact the District</a><a href="/contact#prayer">Prayer requests</a><a href="/admin">Administrator sign-in</a><a href="https://pcgonline.org/" target="_blank" rel="noreferrer">Presbyterian Church of Ghana <span aria-hidden="true">↗</span></a></div>
-        <div className="footer-scripture"><span className="footer-cross" aria-hidden="true">✝</span><div><span className="footer-heading">Our shared calling</span><blockquote>“That they all may be one.”</blockquote><span className="footer-verse">JOHN 17:21</span></div></div>
+        <div className="footer-column"><span className="footer-heading">Helpful links</span><a href="/contact">Contact the District</a><a href="/contact#prayer">Prayer requests</a><a href="https://pcgonline.org/" target="_blank" rel="noreferrer">Presbyterian Church of Ghana <span aria-hidden="true">↗</span></a></div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} Worikambo Presbyterian Connect. All rights reserved.</span><span className="footer-bottom-right"><span className="footer-dot" /> Built for faith, community & connection <span className="footer-dot red" /></span></div>
       </div>
     </footer>
