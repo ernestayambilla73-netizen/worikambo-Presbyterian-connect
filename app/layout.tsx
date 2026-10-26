@@ -1,15 +1,26 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import InstallApp from "./components/InstallApp";
 
 export const metadata: Metadata = {
   title: "Worikambo Presbyterian Connect",
   description: "The digital home for congregations, worship, news and resources in the Worikambo District of the Presbyterian Church of Ghana.",
   manifest: "/manifest.json",
+  applicationName: "Worikambo Presbyterian Connect",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "Presby Connect" },
+  icons: { icon: "/pcg-connect-mark.svg", shortcut: "/pcg-connect-mark.svg", apple: "/pcg-connect-mark.svg" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#173f98",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 function Brand() {
   return <a className="brand" href="/" aria-label="Worikambo Presbyterian Connect home">
-    <span className="brand-mark" aria-hidden="true">✝</span>
+    <img className="brand-image" src="/pcg-connect-mark.svg" width="49" height="49" alt="" />
     <span>WORIKAMBO PRESBYTERIAN<br/>CONNECT<small>PRESBYTERIAN CHURCH OF GHANA</small></span>
   </a>;
 }
@@ -30,6 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </nav>
     </div></header>
     {children}
+    <InstallApp />
     <footer className="site-footer">
       <div className="footer-glow" aria-hidden="true" />
       <div className="container footer-content">
