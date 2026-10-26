@@ -4,27 +4,17 @@ import { useState } from "react";
 
 type Props = { src?: string; label: string; alt: string };
 
-// Use an image hosted by the official PCG Young People's Guild site as a
-// resilient fallback whenever an external ministry image blocks hotlinking.
-const fallbackSrc = "https://pcgypg.org/images/pcg-logo-lg.png";
-
 export default function MinistryLogo({ src, label, alt }: Props) {
   const [failed, setFailed] = useState(false);
-  const [fallbackFailed, setFallbackFailed] = useState(false);
 
+  // Never substitute the YPG emblem for another ministry. If that ministry's
+  // own image is unavailable, show its clearly labelled local monogram instead.
   if (!src || failed) {
-    if (!fallbackFailed) {
-      return (
-        <img
-          className="ministry-logo ministry-logo-fallback"
-          src={fallbackSrc}
-          alt={`${alt} (Presbyterian Church emblem)`}
-          loading="eager"
-          onError={() => setFallbackFailed(true)}
-        />
-      );
-    }
-    return <span className="ministry-logo ministry-logo-monogram" role="img" aria-label={alt}>{label}</span>;
+    return (
+      <span className="ministry-logo ministry-logo-monogram" role="img" aria-label={alt}>
+        {label}
+      </span>
+    );
   }
 
   return (
