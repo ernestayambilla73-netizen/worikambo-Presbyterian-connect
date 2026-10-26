@@ -3,18 +3,17 @@ import MinistryLogo from "../components/MinistryLogo";
 type Props={params:Promise<{section:string}>};
 type MinistryLogo={src?:string;label:string;alt:string};
 const ministryLogos:Record<string,MinistryLogo>={
-  // Ministry-specific emblems only; unverified third-party artwork is not labelled official.
-  "Children's Service":{label:"CS",alt:"Presbyterian Children’s Service emblem"},
-  "Junior Youth (JY)":{src:"/ministry-logos/jy.svg",label:"JY",alt:"Worikambo Junior Youth ministry badge"},
-  "Young People's Guild (YPG)":{src:"/ministry-logos/ypg.svg",label:"YPG",alt:"Worikambo Young People’s Guild ministry badge"},
-  "Young Adults' Fellowship (YAF)":{src:"/ministry-logos/yaf.svg",label:"YAF",alt:"Worikambo Young Adults’ Fellowship ministry badge"},
-  "Women's Fellowship":{src:"/ministry-logos/womens-leadership.svg",label:"WF",alt:"Worikambo Women’s Fellowship ministry badge"},
-  "YES":{src:"/ministry-logos/yes.svg",label:"YES",alt:"Worikambo YES ministry badge"},
-  "Women’s Leadership":{src:"/ministry-logos/womens-leadership.svg",label:"WL",alt:"Worikambo Women’s Leadership ministry badge"},
-  "Men's Fellowship":{src:"/ministry-logos/mens-fellowship.svg",label:"MF",alt:"Worikambo Men’s Fellowship ministry badge"},
-  "Bible & Prayer Group":{label:"BPG",alt:"Bible and Prayer Group ministry badge"},
-  "Singing Band & Choir":{label:"SB",alt:"Singing Band and Choir ministry badge"},
-  "Other ministries":{label:"OM",alt:"Other Presbyterian ministries emblem"}
+  "Children's Service":{src:"https://static.wixstatic.com/media/8d370a_1154dcfd27854c85b68946c94d41426b~mv2.png/v1/fill/w_640%2Ch_586%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/shutterstock_1898354080.png",label:"CS",alt:"Presbyterian Children's Service emblem"},
+  "Junior Youth (JY)":{src:"https://osueben-ezer.com/assets/img/JYlogo.png",label:"JY",alt:"Presbyterian Junior Youth logo"},
+  "Young People's Guild (YPG)":{src:"https://pbs.twimg.com/media/Fa1QL4VWYAMGo0J.jpg",label:"YPG",alt:"Presbyterian Young People's Guild logo"},
+  "Young Adults' Fellowship (YAF)":{src:"https://www.osueben-ezer.com/assets/img/YAFogo.png",label:"YAF",alt:"Presbyterian Young Adults' Fellowship logo"},
+  "Women's Fellowship":{label:"WF",alt:"Women's Fellowship official logo not yet verified"},
+  "YES":{label:"YES",alt:"YES ministry official logo not yet verified"},
+  "Women’s Leadership":{label:"WL",alt:"Women's Leadership official logo not yet verified"},
+  "Men's Fellowship":{label:"MF",alt:"Men's Fellowship official logo not yet verified"},
+  "Bible & Prayer Group":{src:"https://osueben-ezer.com/assets/img/BSPG.png",label:"BPG",alt:"Presbyterian Bible Study and Prayer Group logo"},
+  "Singing Band & Choir":{src:"https://www.pngitem.com/pimgs/m/518-5181372_presbyterian-church-ghana-singing-band-logo-hd-png.png",label:"SB",alt:"Presbyterian Church Ghana Singing Band logo"},
+  "Other ministries":{label:"OM",alt:"Official ministry logo not yet supplied"}
 };
 const data:Record<string,{title:string;intro:string;cards:{icon:string;title:string;text:string;href:string}[]}>={
 about:{title:"About the District",intro:"A shared home for worship, discipleship, fellowship and service throughout the Worikambo Presbyterian District.",cards:[{icon:"✝",title:"Our purpose",text:"Help congregations communicate clearly, welcome visitors and keep members informed.",href:"/ministries"},{icon:"♡",title:"Our values",text:"Worship rooted in Scripture, discipleship for every generation, service and unity.",href:"/ministries"}]},
