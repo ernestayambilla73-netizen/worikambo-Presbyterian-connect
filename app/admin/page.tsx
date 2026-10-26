@@ -41,7 +41,8 @@ export default function AdminDashboard() {
  const [busy, setBusy] = useState(false);
  const [notice, setNotice] = useState("");
  const [error, setError] = useState("");
- const [counts, setCounts] = useState<Record<string,number>>({});\n const [mediaFiles, setMediaFiles] = useState<Record<string,File>>({});
+ const [counts, setCounts] = useState<Record<string,number>>({});
+ const [mediaFiles, setMediaFiles] = useState<Record<string,File>>({});
  const module = modules[active];
 
  const checkAccess = useCallback(async (user: any) => {
