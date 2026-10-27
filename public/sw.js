@@ -1,4 +1,4 @@
-const CACHE_NAME = "presby-connect-v1";
+const CACHE_NAME = "peace-sumalism-congregation-v2";
 const APP_SHELL = ["/", "/manifest.json", "/pcg-connect-mark.svg"];
 
 self.addEventListener("install", (event) => {
