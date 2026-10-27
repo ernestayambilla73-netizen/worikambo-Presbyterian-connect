@@ -265,3 +265,50 @@ h1 span{color:#0868cf}
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
 }
+
+
+/* Homepage church-life slideshow */
+.home-photo-section{background:linear-gradient(180deg,#f5f9fe,#fff)}
+.photo-category-tabs{display:flex;gap:8px;overflow-x:auto;padding:3px 2px 14px;margin-bottom:10px;scrollbar-width:thin}
+.photo-category-tabs button{flex:0 0 auto;border:1px solid #d9e5f4;border-radius:999px;padding:10px 14px;background:#fff;color:#244064;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
+.photo-category-tabs button.active{background:#092b5d;color:#fff;border-color:#092b5d}
+.home-photo-stage{position:relative;isolation:isolate;min-height:300px;height:clamp(300px,48vw,560px);overflow:hidden;border-radius:22px;background:#e8f1fb;box-shadow:0 20px 52px rgba(9,43,93,.14)}
+.home-photo-stage>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.home-photo-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,21,48,.82),rgba(4,21,48,.28) 60%,rgba(4,21,48,.08)),linear-gradient(0deg,rgba(4,21,48,.35),transparent 45%)}
+.home-photo-caption{position:absolute;left:clamp(20px,5vw,58px);bottom:clamp(24px,5vw,56px);max-width:620px;color:#fff}
+.home-photo-caption>span{font-size:10px;letter-spacing:1.6px;font-weight:850;color:#d9eaff}
+.home-photo-caption h3{font-size:clamp(25px,4.5vw,48px);line-height:1.1;letter-spacing:-.8px;margin:12px 0;color:#fff}
+.home-photo-caption p{font-size:14px;line-height:1.6;color:#f0f6ff;margin:0;max-width:540px}
+.home-photo-controls{position:absolute;right:20px;bottom:20px;display:flex;align-items:center;gap:12px;color:#fff;font-size:12px;font-weight:800}
+.home-photo-controls button{width:38px;height:38px;border:1px solid #ffffff77;border-radius:50%;background:#092b5d99;color:#fff;font-size:25px;line-height:1;cursor:pointer}
+.home-photo-empty{border:1px dashed #b9cbe3;border-radius:18px;padding:32px;background:#fff;color:#243b5b}
+.home-photo-empty p{max-width:680px;color:#5d6f87;line-height:1.7}
+.home-photo-source{margin:10px 2px 0;color:#71819a;font-size:11px;line-height:1.6}
+.service-programme-preview .card{min-width:0}
+.service-programme-list{display:grid;gap:18px}
+.service-programme-card{display:grid;grid-template-columns:145px minmax(0,1fr);gap:22px}
+.service-programme-date{align-self:start;border-radius:14px;padding:18px;background:#edf6ff;color:#092b5d;display:flex;flex-direction:column;gap:8px}
+.service-programme-date span{font-size:12px;font-weight:800}
+.service-programme-date strong{font-size:22px}
+.service-programme-main h2{font-size:23px;color:#092b5d;margin:7px 0 15px}
+.service-programme-body p{margin:8px 0;color:#344964;line-height:1.7;white-space:pre-wrap}
+.service-programme-body strong{color:#092b5d}
+.admin-shell,.admin-shell *{color:inherit}
+.admin-shell{color:#172b45}
+.admin-shell h1,.admin-shell h2,.admin-shell h3,.admin-shell label{color:#102b52}
+.admin-shell p,.admin-shell .admin-muted,.admin-shell small{color:#536782}
+.admin-sidebar{color:#fff}
+.admin-sidebar h2,.admin-sidebar a,.admin-sidebar button{color:#fff}
+.admin-sidebar button.active{background:#fff;color:#092b5d}
+.admin-sidebar button.active small{color:#3d5a82}
+.admin-content-head p,.admin-top p,.admin-footnote{color:#536782}
+.admin-fields label{color:#243a58}
+.admin-fields input:not([type=checkbox]):not([type=file]),.admin-fields textarea,.admin-fields select{background:#fff;color:#152b48;border:1px solid #cbd8e8}
+.admin-fields input::placeholder,.admin-fields textarea::placeholder{color:#71819a;opacity:1}
+.admin-fields input:focus,.admin-fields textarea:focus,.admin-fields select:focus{outline:3px solid #8bbdf355;border-color:#2878d1}
+.data-table th{background:#edf4fc;color:#18365f}
+.data-table td{color:#263b58;background:#fff}
+.admin-link-button{color:#075db9}
+.admin-success{color:#146c3b!important;background:#eaf8ef;border-color:#b7e3c7}
+.admin-error{color:#a31f2b!important;background:#fff0f0;border-color:#f0c2c7}
+@media(max-width:640px){.service-programme-card{grid-template-columns:1fr;gap:12px}.service-programme-date{flex-direction:row;align-items:center;justify-content:space-between}.home-photo-stage{border-radius:16px}}
