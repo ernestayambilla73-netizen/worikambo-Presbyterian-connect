@@ -1,7 +1,6 @@
 import { createClient } from "../lib/supabase/server";
 import QuickAccess from "../components/QuickAccess";
 import Icon from "../components/Icon";
-import HomePhotoSlideshow from "../components/HomePhotoSlideshow";
 const cards = [
   {icon:"church",title:"Worship at Peace Congregation",text:"Find our worship times, church location and contact information for your visit.",href:"/contact",cta:"Plan your visit",number:"01"},
   {icon:"cross",title:"Church Groups",text:"Discover a place to belong through Children’s Service, JY, YPG, YAF and adult fellowships.",href:"/ministries",cta:"Explore ministries",number:"02"},
@@ -18,7 +17,6 @@ export default async function Home(){const supabase=await createClient();const {
       <div className="hero-actions"><a className="btn" href="/contact">Plan your visit <span aria-hidden="true">↗</span></a><a className="btn btn-secondary" href="/about">Discover our church</a></div>
       <p className="small">Worship · Discipleship · Fellowship · Service</p>
     </div>
-    <HomePhotoSlideshow photos={galleryPhotos ?? []} />
   </div></section>
   {serviceProgramme && serviceProgramme.length > 0 && <section className="section service-programme-preview"><div className="container"><div className="section-heading"><div><span className="eyebrow">THIS SUNDAY</span><h2>Worship service programme</h2></div><a className="text-link" href="/sunday-service">Full programme →</a></div><div className="grid">{serviceProgramme.slice(0,3).map(item=><article className="card" key={item.id}><span className="eyebrow">{item.event_date ? new Date(item.event_date).toLocaleDateString("en-GH",{weekday:"long",day:"numeric",month:"long",year:"numeric"}) : "Sunday worship"}</span><h3>{item.title}</h3><p style={{whiteSpace:"pre-line"}}>{(item.body||"").slice(0,220)}</p><a className="text-link" href="/sunday-service">View service details →</a></article>)}</div></div></section>}
   <section className="section"><div className="container"><div className="section-heading"><div><span className="eyebrow">Explore our church</span><h2>Find what you’re looking for.</h2></div><p>Clear information, helpful resources and ways to stay connected with your church community.</p></div><div className="grid">{cards.map(c=><article className="card" key={c.title}><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}><div className="card-icon" style={{marginBottom:0}}><Icon name={c.icon as "church" | "cross" | "newspaper" | "calendar" | "music" | "sun"} size={25} strokeWidth={1.8} /></div><span style={{fontSize:11,fontWeight:800,letterSpacing:1,color:"#9aa6bd"}}>{c.number}</span></div><h3>{c.title}</h3><p>{c.text}</p><a className="text-link" href={c.href}>{c.cta} <span aria-hidden="true">→</span></a></article>)}</div></div></section>
