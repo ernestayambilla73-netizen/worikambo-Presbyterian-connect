@@ -5,11 +5,11 @@ import QuickAccess from "../components/QuickAccess";
 import Icon from "../components/Icon";
 
 export const metadata: Metadata = {
-  title: "Peace Congregation | Presbyterian Church of Ghana",
-  description: "The digital home of Peace Congregation of the Presbyterian Church of Ghana.",
+  title: "PEACE (SUMALISM) CONGREGATION | Presbyterian Church of Ghana",
+  description: "The digital home of PEACE (SUMALISM) CONGREGATION of the Presbyterian Church of Ghana.",
   manifest: "/manifest.json",
-  applicationName: "Peace Congregation",
-  appleWebApp: { capable: true, statusBarStyle: "default", title: "Presby Connect" },
+  applicationName: "PEACE (SUMALISM) CONGREGATION",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "PEACE (SUMALISM) CONGREGATION" },
   icons: { icon: "/pcg-connect-mark.svg", shortcut: "/pcg-connect-mark.svg", apple: "/pcg-connect-mark.svg" },
 };
 
@@ -21,9 +21,9 @@ export const viewport: Viewport = {
 };
 
 function Brand() {
-  return <a className="brand" href="/" aria-label="Peace Congregation home">
+  return <a className="brand" href="/" aria-label="PEACE (SUMALISM) CONGREGATION home">
     <img className="brand-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Presbyterian_Church_of_Ghana_Crest.png" width="49" height="49" alt="Presbyterian Church of Ghana crest" />
-    <span>PEACE<br/>CONGREGATION<small>PRESBYTERIAN CHURCH OF GHANA</small></span>
+    <span>PEACE<br/>(SUMALISM)<br/>CONGREGATION<small>PRESBYTERIAN CHURCH OF GHANA</small></span>
   </a>;
 }
 
