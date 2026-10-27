@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "../../lib/supabase/client";
+import QuickAccess from "../../components/QuickAccess";
 
 type Row = Record<string, any>;
 type Field = { key: string; label: string; type?: string; required?: boolean; options?: string[] };
@@ -134,6 +135,7 @@ export default function AdminDashboard() {
 
  return <main className="admin-shell"><div className="container admin-container">
   <div className="admin-top"><div><span className="eyebrow">CONTROL CENTRE</span><h1>Website administration</h1><p>Signed in as {session.email}. Changes are stored in Supabase PostgreSQL.</p></div><button className="btn btn-secondary" onClick={signOut}>Sign out</button></div>
+  <div className="admin-quick-access-row"><QuickAccess admin /></div>
   <div className="admin-summary">{modules.map(m=><button key={m.table} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table] ?? "—"}</strong><span>{m.label}</span></button>)}</div>
   <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register &amp; age groups ↗</a>{modules.map((m,i)=><button key={m.table} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
    <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? "Upload church photos, add captions and publish them to the public Gallery." : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
