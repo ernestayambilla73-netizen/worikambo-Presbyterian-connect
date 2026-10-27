@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import InstallApp from "./components/InstallApp";
 import QuickAccess from "../components/QuickAccess";
+import Icon from "../components/Icon";
 
 export const metadata: Metadata = {
   title: "Worikambo Presbyterian Connect",
@@ -38,7 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <Brand />
       <nav className="nav-links" aria-label="Main navigation">
         {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
-        <a className="nav-cta" href="/contact">Plan a Visit <span aria-hidden="true">↗</span></a>
+        <a className="nav-cta" href="/contact">Plan a Visit <Icon name="arrow-up-right" size={15} /></a>
       </nav>
       <QuickAccess />
     </div></header>
@@ -50,11 +51,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div className="footer-feature">
           <div className="footer-brand-block"><Brand /><span className="footer-kicker">FAITH · FELLOWSHIP · SERVICE</span></div>
           <p className="footer-mission">A connected church family, growing in faith and serving our communities across the Worikambo Presbyterian District.</p>
-          <a className="footer-contact-cta" href="/contact"><span className="footer-cta-icon">↗</span><span><strong>Connect with us</strong><small>We would love to hear from you</small></span></a>
+          <a className="footer-contact-cta" href="/contact"><span className="footer-cta-icon"><Icon name="arrow-up-right" size={18} /></span><span><strong>Connect with us</strong><small>We would love to hear from you</small></span></a>
         </div>
         <div className="footer-column"><span className="footer-heading">Discover</span><a href="/about">About the District</a><a href="/congregations">Our Congregations</a><a href="/ministries">Church Groups & Ministries</a><a href="/events">Events & Programmes</a></div>
         <div className="footer-column"><span className="footer-heading">Faith resources</span><a href="/devotional">Daily Devotional</a><a href="/hymns">Hymns & Liturgy</a><a href="/sermons">Sermons & Messages</a><a href="/news">News & Announcements</a></div>
-        <div className="footer-column"><span className="footer-heading">Helpful links</span><a href="/contact">Contact the District</a><a href="/contact#prayer">Prayer requests</a><a href="https://pcgonline.org/" target="_blank" rel="noreferrer">Presbyterian Church of Ghana <span aria-hidden="true">↗</span></a></div>
+        <div className="footer-column"><span className="footer-heading">Helpful links</span><a href="/contact">Contact the District</a><a href="/contact#prayer">Prayer requests</a><a href="https://pcgonline.org/" target="_blank" rel="noreferrer">Presbyterian Church of Ghana <Icon name="arrow-up-right" size={13} /></a></div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} Worikambo Presbyterian Connect. All rights reserved.</span><span className="footer-bottom-right"><span className="footer-dot" /> Built for faith, community & connection <span className="footer-dot red" /></span></div>
       </div>
     </footer>
