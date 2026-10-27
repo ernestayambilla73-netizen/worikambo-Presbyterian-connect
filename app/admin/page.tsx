@@ -9,20 +9,8 @@ type Field = { key: string; label: string; type?: string; required?: boolean; op
 type Module = { label: string; table: string; key: string; fields: Field[]; columns: string[]; private?: boolean };
 
 const modules: Module[] = [
- { label: "Congregations", table: "church_congregations", key: "id", columns: ["name","community","service_times","is_published"], fields: [
-  {key:"name",label:"Congregation name",required:true},{key:"community",label:"Community"},{key:"address",label:"Address"},{key:"service_times",label:"Worship times",type:"textarea"},{key:"contact_name",label:"Contact person"},{key:"contact_phone",label:"Contact phone"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
- { label: "News & events", table: "church_posts", key: "id", columns: ["post_type","title","event_date","is_published"], fields: [
-  {key:"post_type",label:"Content type",type:"select",options:["news","event","sermon","devotional","service_programme"],required:true},{key:"title",label:"Title",required:true},{key:"body",label:"Content",type:"textarea"},{key:"image_url",label:"News cover image (upload)",type:"image"},{key:"event_date",label:"Event/date",type:"datetime-local"},{key:"venue",label:"Venue"},{key:"source_url",label:"Audio/video/source URL"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
  { label: "Hero slideshow & gallery", table: "church_gallery", key: "id", columns: ["title","album","event_date","is_published"], fields: [
-  {key:"title",label:"Photo title",required:true},{key:"caption",label:"Caption / story",type:"textarea"},{key:"album",label:"Album / category",required:true},{key:"event_date",label:"Event date",type:"date"},{key:"image_url",label:"Photo (upload image)",type:"image",required:true},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
- { label: "Hymns & resources", table: "church_resources", key: "id", columns: ["title","resource_type","url","is_published"], fields: [
-  {key:"title",label:"Resource title",required:true},{key:"resource_type",label:"Resource type",type:"select",options:["hymn_link","liturgy_link","course_material","other"],required:true},{key:"url",label:"Authorised resource URL"},{key:"notes",label:"Notes",type:"textarea"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
- { label: "Church courses", table: "church_courses", key: "id", private: true, columns: ["title","course_date","materials_url"], fields: [
-  {key:"title",label:"Course title",required:true},{key:"description",label:"Description",type:"textarea"},{key:"course_date",label:"Course date",type:"date"},{key:"materials_url",label:"Materials URL"}]},
- { label: "Ministries", table: "church_ministries", key: "id", columns: ["name","meeting_info","is_published"], fields: [
-  {key:"name",label:"Ministry name",required:true},{key:"description",label:"Description",type:"textarea"},{key:"logo_url",label:"Logo image URL"},{key:"meeting_info",label:"Meeting details"},{key:"href",label:"Ministry page or link"},{key:"is_published",label:"Publish publicly",type:"checkbox"}]},
- { label: "Page content", table: "church_page_content", key: "slug", columns: ["slug","title","updated_at"], fields: [
-  {key:"slug",label:"Page slug (e.g. about, contact)",required:true},{key:"title",label:"Page title",required:true},{key:"intro",label:"Page introduction",type:"textarea"},{key:"body",label:"Page content",type:"textarea"}]}
+  {key:"title",label:"Photo title",required:true},{key:"caption",label:"Caption / story",type:"textarea"},{key:"album",label:"Album / category",required:true},{key:"event_date",label:"Event date",type:"date"},{key:"image_url",label:"Photo (upload image)",type:"image",required:true},{key:"is_published",label:"Publish publicly",type:"checkbox"}]}
 ];
 
 const blank = (m: Module): Row => Object.fromEntries(m.fields.map(f => [f.key, f.type === "checkbox" ? false : ""]));
@@ -119,7 +107,7 @@ export default function AdminDashboard() {
   else if (module.table !== "church_congregations" && module.table !== "church_ministries") payload.created_by = session.id;
   const {error} = await supabase.from(module.table).upsert(payload, {onConflict:module.key});
   if (error) setError(error.message);
-  else { setNotice("Saved to the Presbyterian Connect database."); setEditing(false); setMediaFiles({}); await load(); }
+  else { setNotice("Saved to the Peace Congregation database."); setEditing(false); setMediaFiles({}); await load(); }
   setBusy(false);
  }
  async function remove(row: Row) {
@@ -131,12 +119,15 @@ export default function AdminDashboard() {
  }
 
  if (checking) return <main className="admin-shell"><div className="container"><div className="admin-panel">Checking administrator session…</div></div></main>;
- if (!authorized) return <main className="admin-shell"><div className="container admin-container"><section className="admin-panel admin-auth"><span className="eyebrow">WORIKAMBO PRESBYTERIAN CONNECT</span><h1>Administrator sign in</h1><p>Sign in with your Supabase account. Only accounts explicitly approved in the church administrator list can manage website content.</p><form onSubmit={signIn} className="admin-form"><label>Email address<input type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="username" required /></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required /></label><button className="btn" disabled={busy}>{busy ? "Please wait…" : "Sign in securely"}</button><button type="button" className="admin-link-button" disabled={busy} onClick={createAccount}>Create an account for approval</button></form>{notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}<p className="admin-muted">Creating an account does not make you an administrator. Access is granted separately by the project owner.</p></section></div></main>;
+ if (!authorized) return <main className="admin-shell"><div className="container admin-container"><section className="admin-panel admin-auth"><span className="eyebrow">PEACE (SUMALISM) CONGREGATION</span><h1>Administrator sign in</h1><p>Sign in with your Supabase account. Only accounts explicitly approved in the church administrator list can manage website content.</p><form onSubmit={signIn} className="admin-form"><label>Email address<input type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="username" required /></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required /></label><button className="btn" disabled={busy}>{busy ? "Please wait…" : "Sign in securely"}</button><button type="button" className="admin-link-button" disabled={busy} onClick={createAccount}>Create an account for approval</button></form>{notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}<p className="admin-muted">Creating an account does not make you an administrator. Access is granted separately by the project owner.</p></section></div></main>;
 
  return <main className="admin-shell"><div className="container admin-container">
-  <div className="admin-top"><div><span className="eyebrow">CONTROL CENTRE</span><h1>Website administration</h1><p>Signed in as {session.email}. Changes are stored in Supabase PostgreSQL.</p></div><button className="btn btn-secondary" onClick={signOut}>Sign out</button></div>
+  <div className="admin-top"><div><span className="eyebrow">CONTROL CENTRE</span><h1>Peace Congregation administration</h1><p>Signed in as {session.email}. Changes are stored in Supabase PostgreSQL.</p></div><button className="btn btn-secondary" onClick={signOut}>Sign out</button></div>
   
-  <div className="admin-summary">{modules.map(m=><button key={m.table} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table] ?? "—"}</strong><span>{m.label}</span></button>)}</div>
+  <div className="admin-summary">
+   {modules.map(m=><button key={m.table} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table] ?? "—"}</strong><span>{m.label}</span></button>)}
+   <a className="admin-summary-card" href="/admin/members"><strong>↗</strong><span>Member registration &amp; death records</span></a>
+  </div>
   <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register, death records &amp; groups ↗</a>{modules.map((m,i)=><button key={m.table} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
    <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? "Upload and publish church photos here. Published photos automatically appear in the homepage hero slideshow and public Gallery; add seven or more photos for a longer sequence." : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
     {notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}
