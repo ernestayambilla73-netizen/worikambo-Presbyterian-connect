@@ -7,12 +7,12 @@ type Props = { src?: string; label: string; alt: string };
 export default function MinistryLogo({ src, label, alt }: Props) {
   const [failed, setFailed] = useState(false);
 
-  // Never invent or substitute an emblem. Use sourced artwork, and clearly
-  // label ministries whose official logo has not yet been verified.
+  // Use official artwork when its image loads. If no verified image is
+  // configured or a remote host blocks it, keep a consistent visible mark.
   if (!src || failed) {
     return (
       <span className="ministry-logo ministry-logo-monogram" role="img" aria-label={alt}>
-        {failed ? "Logo unavailable" : `${label} logo pending`}
+        {label}
       </span>
     );
   }
