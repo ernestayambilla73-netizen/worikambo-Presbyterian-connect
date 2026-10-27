@@ -351,3 +351,16 @@ h1 span{color:#0868cf}
   .hero-slide-controls{right:12px;bottom:12px;}
   .hero-slide-dots{width:100%;justify-content:center;}
 }
+
+
+/* Simple multi-photo upload panel */
+.bulk-photo-upload{margin:18px 0 24px;padding:20px;border:1px solid #cfe1f5;border-radius:16px;background:linear-gradient(135deg,#f4f9ff,#fff)}
+.bulk-photo-upload .admin-editor-head{margin-bottom:10px}
+.bulk-photo-upload .admin-editor-head h3{margin:0 0 5px}
+.bulk-photo-upload .admin-editor-head p{margin:0}
+.bulk-photo-picker{display:flex;align-items:center;justify-content:center;gap:12px;min-height:74px;margin:12px 0;padding:16px;border:2px dashed #9fc5ec;border-radius:12px;background:#fff;color:#092b5d;font-weight:800;cursor:pointer;flex-wrap:wrap}
+.bulk-photo-picker input{display:block;max-width:100%;font:inherit;font-size:12px;font-weight:500;color:#344964}
+.bulk-photo-summary{margin:12px 0;padding:12px 14px;border:1px solid #dce8f6;border-radius:10px;background:#fff;color:#17365d}
+.bulk-photo-summary ul{max-height:130px;overflow:auto;margin:8px 0;padding-left:20px;font-size:12px;color:#536782;overflow-wrap:anywhere}
+.bulk-photo-upload .admin-muted{font-size:12px;line-height:1.65}
+@media(max-width:640px){.bulk-photo-upload{padding:14px}.bulk-photo-picker{align-items:flex-start;flex-direction:column}.bulk-photo-picker input{width:100%}}
