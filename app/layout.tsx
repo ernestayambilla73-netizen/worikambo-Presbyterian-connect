@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import InstallApp from "./components/InstallApp";
+import QuickAccess from "../components/QuickAccess";
 
 export const metadata: Metadata = {
   title: "Worikambo Presbyterian Connect",
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
         <a className="nav-cta" href="/contact">Plan a Visit <span aria-hidden="true">↗</span></a>
       </nav>
+      <QuickAccess />
     </div></header>
     {children}
     <InstallApp />
