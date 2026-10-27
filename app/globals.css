@@ -312,3 +312,30 @@ h1 span{color:#0868cf}
 .admin-success{color:#146c3b!important;background:#eaf8ef;border-color:#b7e3c7}
 .admin-error{color:#a31f2b!important;background:#fff0f0;border-color:#f0c2c7}
 @media(max-width:640px){.service-programme-card{grid-template-columns:1fr;gap:12px}.service-programme-date{flex-direction:row;align-items:center;justify-content:space-between}.home-photo-stage{border-radius:16px}}
+
+
+/* Peace Congregation hero slideshow */
+.hero-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px}
+.hero-slideshow{min-width:0;width:100%;max-width:570px;justify-self:end}
+.hero-slide-image{position:relative;overflow:hidden;isolation:isolate;aspect-ratio:4/4.15;min-height:390px;max-height:570px;border-radius:24px;background:#102b68;box-shadow:0 28px 65px rgba(16,43,104,.2)}
+.hero-slide-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;animation:heroSceneFade .55s ease both}
+@keyframes heroSceneFade{from{opacity:.5;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
+.hero-slide-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,20,50,.03) 30%,rgba(7,20,50,.86) 100%);pointer-events:none}
+.hero-slide-copy{position:absolute;left:25px;right:25px;bottom:72px;color:#fff}
+.hero-slide-kicker{font-size:9px;font-weight:800;letter-spacing:1.5px;color:#e7edff}
+.hero-slide-copy h2{font-size:clamp(22px,2.6vw,34px);letter-spacing:-.7px;line-height:1.16;margin:10px 0;color:#fff;text-shadow:0 2px 15px #0004}
+.hero-slide-copy p{font-size:12px;line-height:1.6;color:#edf2ff;margin:0;max-width:400px}
+.hero-slide-controls{position:absolute;right:18px;bottom:18px;display:flex;align-items:center;gap:9px;color:white}
+.hero-slide-controls button{width:35px;height:35px;display:grid;place-items:center;border:1px solid #ffffff80;border-radius:50%;background:#ffffff20;color:#fff;font-size:22px;cursor:pointer;backdrop-filter:blur(8px)}
+.hero-slide-controls button:hover{background:#fff;color:var(--blue)}
+.hero-slide-controls span{font-size:10px;font-weight:800;letter-spacing:1px;min-width:48px;text-align:center}
+.hero-slide-controls i{font-style:normal;color:#d2dcf8;padding:0 3px}
+.hero-slide-controls .hero-slide-pause{font-size:14px}
+.hero-slide-dots{display:flex;justify-content:center;gap:6px;padding:13px 0 5px}
+.hero-slide-dots button{height:5px;width:15px;border:0;border-radius:8px;background:#c8d2e8;padding:0;cursor:pointer;transition:width .2s,background .2s}
+.hero-slide-dots button.active{width:28px;background:var(--red)}
+.hero-slide-admin-note{font-size:10px;color:var(--muted);text-align:center;line-height:1.6}
+.hero-slide-admin-note a{font-weight:800;color:var(--blue)}
+@media(max-width:1000px){.hero-inner{grid-template-columns:1fr 1fr;gap:25px}.hero-slide-image{min-height:350px}}
+@media(max-width:700px){.hero-inner{grid-template-columns:1fr;padding:42px 18px;gap:28px}.hero-slideshow{max-width:none;justify-self:stretch}.hero-slide-image{aspect-ratio:4/3.4;min-height:300px;max-height:440px}.hero-slide-copy{left:19px;right:19px;bottom:68px}.hero-slide-copy h2{font-size:25px}.hero-slide-controls{right:12px;bottom:12px;gap:6px}.hero-slide-controls button{width:32px;height:32px}.hero-slide-dots{padding-top:10px}}
+@media(prefers-reduced-motion:reduce){.hero-slide-image img{animation:none}}
