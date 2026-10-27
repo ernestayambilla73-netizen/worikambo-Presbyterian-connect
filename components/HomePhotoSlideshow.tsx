@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 type Photo = { id:string; title:string; caption?:string|null; image_url:string; album?:string|null; event_date?:string|null };
 const fallbackSlides = [
-  {title:"A church family united in faith",caption:"Presbyterian Church of Ghana · Peace Congregation",image:"https://pcgonline.org/wp-content/uploads/2021/04/Welcome.jpg"},
+  {title:"A church family united in faith",caption:"Presbyterian Church of Ghana · PEACE (SUMALISM) CONGREGATION",image:"https://pcgonline.org/wp-content/uploads/2021/04/Welcome.jpg"},
   {title:"Worship, fellowship and service",caption:"A welcoming place to grow together",image:"https://pcgonline.org/wp-content/uploads/2021/04/Welcome1a.jpg"},
 ];
 
