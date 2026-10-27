@@ -13,7 +13,7 @@ export default async function Home(){const supabase=await createClient();const {
     <div><span className="eyebrow">Presbyterian Church of Ghana · Worikambo District</span>
       <h1>One faith.<br/><span>One family.</span><br/>Connected in Christ.</h1>
       <p className="lead">Welcome to the digital home of our church family. Discover where to worship, connect with ministries, explore church resources and keep up with what is happening across the Worikambo District.</p>
-      <div className="hero-actions"><a className="btn" href="/congregations">Find a congregation <span aria-hidden="true">↗</span></a><a className="btn btn-secondary" href="/about">Discover our church</a><QuickAccess /></div>
+      <div className="hero-actions"><a className="btn" href="/congregations">Find a congregation <span aria-hidden="true">↗</span></a><a className="btn btn-secondary" href="/about">Discover our church</a></div>
       <p className="small">Worship · Discipleship · Fellowship · Service</p>
     </div>
     <aside className="hero-panel"><span className="eyebrow">You are welcome here</span><h3>A place to grow in faith and community.</h3><p className="small">Whether you are a lifelong member, a new visitor or looking for a church family, there is a place for you to connect and grow.</p>
