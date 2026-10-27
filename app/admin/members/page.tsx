@@ -111,6 +111,7 @@ export default function MemberRegisterPage() {
   const payload:any = {...draft,created_by:draft.id ? undefined : user?.id,updated_by:user?.id};
   delete payload.id;
   if (payload.date_of_birth==="") payload.date_of_birth=null;
+  if (payload.death_date==="") payload.death_date=null;
   if (!payload.member_number?.trim()) { setError("Member number is required."); setBusy(false); return; }
   const {error:saveError} = draft.id
    ? await supabase.from("church_members").update(payload).eq("id",draft.id)
