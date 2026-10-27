@@ -32,6 +32,8 @@ export default function AdminDashboard() {
  const [error, setError] = useState("");
  const [counts, setCounts] = useState<Record<string,number>>({});
  const [mediaFiles, setMediaFiles] = useState<Record<string,File>>({});
+ const [bulkFiles, setBulkFiles] = useState<File[]>([]);
+ const [bulkUploading, setBulkUploading] = useState(false);
  const module = modules[active];
 
  const checkAccess = useCallback(async (user: any) => {
@@ -88,6 +90,34 @@ export default function AdminDashboard() {
   if (copy.course_date) copy.course_date = String(copy.course_date).slice(0,10);
   setDraft(copy); setMediaFiles({}); setEditing(true); setError(""); setNotice("");
  }
+ async function uploadMany() {
+  if (!bulkFiles.length || module.table !== "church_gallery") return;
+  setBulkUploading(true); setBusy(true); setError(""); setNotice("");
+  let uploaded = 0;
+  const failures: string[] = [];
+  for (const file of bulkFiles) {
+   try {
+    const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,"-");
+    const path = `church_gallery/${session.id}/${Date.now()}-${Math.random().toString(36).slice(2,8)}-${safeName}`;
+    const {error:uploadError} = await supabase.storage.from("church-gallery").upload(path,file,{upsert:false,contentType:file.type});
+    if (uploadError) { failures.push(file.name + ": " + uploadError.message); continue; }
+    const title = file.name.replace(/\\.[^.]+$/,"").replace(/[_-]+/g," ").trim() || "Church photo";
+    const image_url = supabase.storage.from("church-gallery").getPublicUrl(path).data.publicUrl;
+    const {error:insertError} = await supabase.from("church_gallery").insert({
+      title, caption: "", album: "Church Life", event_date: null, image_url,
+      is_published: true, created_by: session.id, updated_at: new Date().toISOString()
+    });
+    if (insertError) failures.push(file.name + ": " + insertError.message);
+    else uploaded++;
+   } catch (e) { failures.push(file.name + ": upload failed"); }
+  }
+  setBulkFiles([]);
+  setBulkUploading(false); setBusy(false);
+  if (failures.length) {
+   setError(`Uploaded ${uploaded} of ${bulkFiles.length} photos. ` + failures.slice(0,3).join(" | "));
+  } else setNotice(`Successfully uploaded and published ${uploaded} photo${uploaded===1?"":"s"}. Titles came from the filenames; you can edit them later.`);
+  await load();
+ }
  async function save(e: React.FormEvent) {
   e.preventDefault(); setBusy(true); setError(""); setNotice("");
   const payload:Row = {...draft};
@@ -131,6 +161,15 @@ export default function AdminDashboard() {
   <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register, death records &amp; groups ↗</a>{modules.map((m,i)=><button key={m.table} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
    <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? "Upload and publish church photos here. Published photos automatically appear in the homepage hero slideshow and public Gallery; add seven or more photos for a longer sequence." : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
     {notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}
+    {module.table === "church_gallery" && <section className="admin-editor bulk-photo-upload">
+      <div className="admin-editor-head"><div><h3>Quick photo upload</h3><p className="admin-muted">Select several pictures at once. No need to fill in each photo's details.</p></div></div>
+      <label className="bulk-photo-picker">Choose photos
+        <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={e=>{const selected=Array.from(e.target.files ?? []);const tooLarge=selected.find(file=>file.size>10*1024*1024);if(tooLarge){setError(`${tooLarge.name} is larger than 10 MB. Choose smaller images.`);e.currentTarget.value="";return;}setBulkFiles(selected);setError("");}} />
+      </label>
+      {bulkFiles.length>0 && <div className="bulk-photo-summary"><strong>{bulkFiles.length} photo{bulkFiles.length===1?"":"s"} selected</strong><ul>{bulkFiles.map((file,i)=><li key={file.name+i}>{file.name}</li>)}</ul><button type="button" className="admin-close" onClick={()=>setBulkFiles([])}>Clear selection</button></div>}
+      <p className="admin-muted">Photos are automatically titled from their filenames, placed in “Church Life”, and published to the homepage slideshow and gallery. You can edit details later.</p>
+      <button type="button" className="btn" disabled={!bulkFiles.length || busy} onClick={uploadMany}>{bulkUploading?"Uploading photos…":`Upload ${bulkFiles.length||""} selected photo${bulkFiles.length===1?"":"s"}`}</button>
+    </section>}
     {editing && <form className="admin-editor" onSubmit={save}><div className="admin-editor-head"><h3>{draft[module.key] ? "Edit record" : "Create record"}</h3><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Cancel</button></div><div className="admin-fields">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"wide":""}>{f.label}{f.type==="textarea" ? <textarea placeholder={module.table==="church_posts" && f.key==="body" && draft.post_type==="service_programme" ? "Preacher: Rev. / Mr / Ms ...\nService leader: ...\nCall to worship: Psalm ...\nFirst Bible reading: Name — Book chapter:verses\nSecond Bible reading: Name — Book chapter:verses\nThird Bible reading: Name — Book chapter:verses\nSermon text/theme: ...\nHymns: ...\nNotices / other roles: ..." : undefined} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/> : f.type==="image" ? <><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file){if(file.size>10*1024*1024){setError("Choose an image smaller than 10 MB.");e.currentTarget.value="";return;}setMediaFiles({...mediaFiles,[f.key]:file});setError("");}}} required={!!f.required && !draft[f.key]}/>{(mediaFiles[f.key]||draft[f.key])&&<small>{mediaFiles[f.key]?.name || "Current image saved"}{draft[f.key]&&!mediaFiles[f.key]&&<> · <a href={draft[f.key]} target="_blank" rel="noreferrer">View current image</a></>}</small>}</> : f.type==="checkbox" ? <input type="checkbox" checked={!!draft[f.key]} onChange={e=>setDraft({...draft,[f.key]:e.target.checked})}/> : f.type==="select" ? <select value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}><option value="">Choose…</option>{f.options?.map(o=><option key={o} value={o}>{o.replaceAll("_"," ")}</option>)}</select> : <input type={f.type ?? "text"} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required} readOnly={f.key===module.key && !!draft[f.key] && module.key==="slug"}/>}</label>)}</div><button className="btn" disabled={busy}>{busy?"Saving…":"Save changes"}</button></form>}
     <div className="admin-table-wrap">{busy && <p className="admin-muted">Loading…</p>}<table className="data-table"><thead><tr>{module.columns.map(c=><th key={c}>{c.replaceAll("_"," ")}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row[module.key]}>{module.columns.map(c=><td key={c}>{display(row[c])}</td>)}<td><div className="admin-row-actions"><button onClick={()=>startEdit(row)}>Edit</button><button className="danger" onClick={()=>remove(row)}>Delete</button></div></td></tr>)}{!rows.length && !busy && <tr><td colSpan={module.columns.length+1}>No records yet. Select “Add new” to create the first one.</td></tr>}</tbody></table></div>
    </section>
