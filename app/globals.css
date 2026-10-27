@@ -193,3 +193,65 @@
 .nav-cta svg,.footer-contact-cta svg,.footer-column a svg{vertical-align:middle;display:inline-block}
 .footer-cta-icon{display:grid;place-items:center}
 @media(prefers-reduced-motion:reduce){.quick-access-menu-icon,.quick-access-menu a,.quick-access-menu a svg{transition:none!important}}
+
+
+/* Website-wide colour system refresh: Presbyterian blue, clean whites, and restrained red accents */
+:root{
+  --blue:#0868cf;
+  --blue-deep:#092b5d;
+  --blue-soft:#eaf4ff;
+  --red:#e94b35;
+  --ink:#172b45;
+  --muted:#5d6f87;
+  --line:#dfeaf6;
+  --surface:#f5f9fe;
+  --white:#fff;
+  --shadow:0 16px 42px rgba(9,43,93,.09);
+  --radius:18px;
+}
+body{background:#fff;color:var(--ink)}
+.topline{height:5px;background:linear-gradient(90deg,#092b5d 0%,#0868cf 72%,#e94b35 72%,#e94b35 86%,#fff 86%)}
+.site-header{background:rgba(255,255,255,.96);border-bottom-color:#e3edf8}
+.nav-links a:hover{background:#edf6ff;color:#0868cf}
+.nav-links .nav-cta,.btn{background:#0868cf;border-color:#0868cf}
+.nav-links .nav-cta:hover,.btn:hover{background:#0758b2;border-color:#0758b2}
+.btn-secondary{background:#fff;color:#0868cf;border-color:#bdd8f6}
+.btn-red{background:#e94b35;border-color:#e94b35}
+.hero{
+  background:
+    radial-gradient(ellipse at 78% 20%,rgba(255,255,255,.96) 0,rgba(255,255,255,.1) 33%,transparent 56%),
+    radial-gradient(ellipse at 10% 5%,rgba(117,190,255,.3) 0,transparent 42%),
+    linear-gradient(120deg,#eaf5ff 0%,#f8fbff 52%,#fff 100%);
+  border-bottom:1px solid #dbeaf8;
+}
+.hero:before{border-color:#0868cf12;box-shadow:0 0 0 35px #0868cf08,0 0 0 75px #0868cf05}
+.hero-inner{padding-top:76px;padding-bottom:76px}
+.eyebrow{color:#0868cf}
+.eyebrow:before{background:currentColor}
+h1{color:#092b5d}
+h1 span{color:#0868cf}
+.hero-panel,.card{border-color:#e0ebf7;box-shadow:0 14px 36px rgba(9,43,93,.07)}
+.hero-panel:before{color:#0868cf0b}
+.service-row strong{color:#0868cf}
+.section-tint{background:linear-gradient(135deg,#f4f9ff,#fbfdff);border-color:#e1edf8}
+.card-icon{background:linear-gradient(145deg,#e5f2ff,#f5faff);color:#0868cf;border-color:#d9eaff}
+.text-link{color:#0868cf}
+.text-link:hover{color:#e94b35}
+.verse-band{background:linear-gradient(115deg,#092b5d 0%,#075db9 68%,#0868cf 100%)}
+.page-hero{background:radial-gradient(ellipse at 86% 15%,#d8ebff 0,transparent 40%),linear-gradient(120deg,#eff7ff,#fff)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#8bbdf3;box-shadow:0 0 0 3px #0868cf15}
+.admin-shell{background:#f4f8fd}
+.admin-sidebar{background:linear-gradient(160deg,#092b5d,#0868cf)}
+.admin-sidebar button.active{background:#eaf4ff;color:#0868cf}
+.quick-access-trigger{color:#0868cf;border-color:#d7e7f8}
+.quick-access-menu a:hover{background:#edf6ff;color:#0868cf}
+.quick-access-menu .quick-access-link-icon{background:#edf6ff;border-color:#d9eaff;color:#0868cf}
+.quick-access-menu a:hover .quick-access-link-icon{background:#0868cf;border-color:#0868cf;color:#fff}
+.quick-access-menu-icon.is-open{color:#e94b35}
+.site-footer:before{background:radial-gradient(ellipse at 12% 0%,#1768bd55,transparent 43%),linear-gradient(125deg,#071a39,#092b5d 62%,#06142d)}
+.footer-glow{background:linear-gradient(90deg,#e94b35 0 18%,#fff 18% 20%,#0868cf 20% 100%)}
+::selection{background:#d9ecff;color:#092b5d}
+@media(max-width:640px){
+ .hero-inner{padding-top:42px;padding-bottom:42px}
+ .hero{background:radial-gradient(ellipse at 90% 8%,rgba(117,190,255,.28) 0,transparent 44%),linear-gradient(145deg,#eaf5ff,#fff 75%)}
+}
