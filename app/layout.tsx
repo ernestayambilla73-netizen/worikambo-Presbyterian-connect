@@ -22,7 +22,7 @@ export const viewport: Viewport = {
 
 function Brand() {
   return <a className="brand" href="/" aria-label="PEACE (SUMALISM) CONGREGATION home">
-    <img className="brand-image" src="/pcg-connect-mark.svg?v=3" width="49" height="49" alt="Presbyterian Church of Ghana crest" />
+    <img className="brand-image" src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png" width="49" height="49" alt="Presbyterian Church of Ghana crest" />
     <span>PEACE<br/>(SUMALISM)<br/>CONGREGATION<small>PRESBYTERIAN CHURCH OF GHANA</small></span>
   </a>;
 }
