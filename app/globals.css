@@ -255,3 +255,13 @@ h1 span{color:#0868cf}
  .hero-inner{padding-top:42px;padding-bottom:42px}
  .hero{background:radial-gradient(ellipse at 90% 8%,rgba(117,190,255,.28) 0,transparent 44%),linear-gradient(145deg,#eaf5ff,#fff 75%)}
 }
+
+
+/* Keep Quick Access independently scrollable without moving the page behind it */
+.quick-access-menu{
+  max-height:calc(100dvh - 104px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
+}
