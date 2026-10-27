@@ -39,7 +39,7 @@ export default function InstallApp() {
 
   async function install() {
     if (installed) {
-      setMessage("Worikambo Presbyterian Connect is already installed.");
+      setMessage("PEACE (SUMALISM) CONGREGATION is already installed.");
       return;
     }
     if (installEvent) {
@@ -56,7 +56,7 @@ export default function InstallApp() {
   if (installed) return null;
 
   return <aside className="install-app" aria-label="Install app">
-    <div className="install-app-copy"><img src="/pcg-connect-mark.svg" alt="" width="38" height="38"/><span><strong>Take the church with you</strong><small>Install Presbyterian Connect on your phone</small></span></div>
+    <div className="install-app-copy"><img src="/pcg-connect-mark.svg" alt="" width="38" height="38"/><span><strong>Take Peace Congregation with you</strong><small>Install PEACE (SUMALISM) CONGREGATION on your phone</small></span></div>
     <button type="button" className="install-app-button" onClick={install}>{installed ? "App installed" : "Install app"}</button>
     {message && <p className="install-app-message" role="status">{message}</p>}
   </aside>;
