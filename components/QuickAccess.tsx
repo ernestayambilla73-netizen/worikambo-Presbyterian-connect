@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "./Icon";
 
 type QuickAccessProps = { admin?: boolean };
@@ -17,6 +17,18 @@ const publicLinks = [
 export default function QuickAccess({ admin = false }: QuickAccessProps) {
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    const previousOverscroll = document.body.style.overscrollBehavior;
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.overscrollBehavior = previousOverscroll;
+    };
+  }, [open]);
+
   return (
     <div className={`quick-access ${admin ? "quick-access-admin" : ""}`}>
       <button
@@ -25,6 +37,7 @@ export default function QuickAccess({ admin = false }: QuickAccessProps) {
         aria-expanded={open}
         aria-controls={admin ? "admin-quick-access-menu" : "home-quick-access-menu"}
         onClick={() => setOpen(value => !value)}
+        onKeyDown={(event) => { if (event.key === "Escape") setOpen(false); }}
       >
         <Icon name="menu" size={22} strokeWidth={2.1} className={`quick-access-menu-icon ${open ? "is-open" : ""}`} /><span className="quick-access-label">Quick Access</span>
       </button>
