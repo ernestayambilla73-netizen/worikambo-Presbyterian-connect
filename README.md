@@ -1,12 +1,18 @@
-# Worikambo Presbyterian Connect
+# PEACE (SUMALISM) CONGREGATION
 
-A responsive Next.js website for **Worikambo Presbyterian Church**, built to support the church's public information and an administrator-managed content workspace.
+The official web presence for **PEACE (SUMALISM) CONGREGATION**, a congregation of the Presbyterian Church of Ghana. The site provides congregation information, ministry groups, worship programmes, a photo slideshow and member administration.
 
-## Phase 1 — one congregation
+## Current release
 
-The first release is focused on one congregation. The website includes the public home page, church information, ministries, news and announcements, events, Sunday service programme, gallery, hymns/resources, devotional information, contact page, and an admin dashboard for managing supported content.
+- Responsive congregation homepage with a hero slideshow.
+- Published slideshow photos are managed from the administrator dashboard and can exceed six scenes.
+- Member register with membership groups and death/deceased records.
+- Presbyterian Church of Ghana crest branding and installable web-app manifest.
+- Public information pages for ministries, news, events, hymns/resources, gallery and contact.
 
-The admin dashboard is available at `/admin`. Access depends on Supabase authentication and the user's record in `church_admins`; creating an account alone does not grant administrator access.
+## Administrator access
+
+Open /admin to sign in with an approved Supabase account. The current dashboard focuses on **Hero slideshow & gallery** and links to **Member registration & death records** at /admin/members. Creating an account alone does not grant administrator access.
 
 ## Technology
 
@@ -18,19 +24,17 @@ The admin dashboard is available at `/admin`. Access depends on Supabase authent
 ## Run locally
 
 1. Install Node.js 20 or newer.
-2. Run `npm install`.
-3. Copy `.env.example` to `.env.local` and fill in the required Supabase URL and publishable/anon key.
-4. Run `npm run dev` and open http://localhost:3000.
-5. Run `npm run build` before submitting changes.
+2. Run npm install.
+3. Copy .env.example to .env.local and fill in the required Supabase URL and publishable/anon key.
+4. Run npm run dev and open http://localhost:3000.
+5. Run npm run build before submitting changes.
 
 Never put a Supabase service-role key in browser-exposed environment variables or client-side code.
 
-## Future multi-congregation path
+## Future expansion
 
-Do not duplicate the app for each church. Before opening the platform to more congregations, introduce a `congregation_id` foreign key on congregation-owned content (posts, gallery, ministries, page content, programmes and resources), seed a stable record for Worikambo Presbyterian Church, and update admin forms and queries to use the selected congregation. Add and test row-level security policies that enforce congregation boundaries before any other congregation is onboarded. Keep district-wide roles separate from congregation-level administrator/editor roles.
-
-This future schema change should be delivered as a reviewed Supabase migration and tested against existing data; it is intentionally not applied as part of the Phase 1 homepage simplification.
+This release is configured for PEACE (SUMALISM) CONGREGATION. Any future multi-congregation rollout must be designed and reviewed separately, including congregation-scoped database records and row-level security. Do not imply that other congregations are currently supported by the live administrator workflow.
 
 ## Deploy
 
-Use the existing Vercel project connected to this repository. Verify the production deployment and test the homepage, public content pages, and `/admin` after each release.
+Use the existing Vercel project connected to this repository. Verify the production deployment and test the homepage, slideshow, member register and /admin after each release.
