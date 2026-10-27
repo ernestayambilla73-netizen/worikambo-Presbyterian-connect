@@ -20,12 +20,12 @@ export default function QuickAccess({ admin = false }: QuickAccessProps) {
     <div className={`quick-access ${admin ? "quick-access-admin" : ""}`}>
       <button
         type="button"
-        className="quick-access-trigger"
+        className="quick-access-trigger" aria-label="Open quick access menu" title="Quick access"
         aria-expanded={open}
         aria-controls={admin ? "admin-quick-access-menu" : "home-quick-access-menu"}
         onClick={() => setOpen(value => !value)}
       >
-        <span aria-hidden="true">⚡</span> Quick Access <span className="quick-access-chevron" aria-hidden="true">{open ? "−" : "+"}</span>
+        <span className={`quick-access-hamburger ${open ? "is-open" : ""}`} aria-hidden="true"><i /><i /><i /></span><span className="quick-access-label">Quick Access</span>
       </button>
       {open && (
         <nav id={admin ? "admin-quick-access-menu" : "home-quick-access-menu"} className="quick-access-menu" aria-label="Quick access links">
