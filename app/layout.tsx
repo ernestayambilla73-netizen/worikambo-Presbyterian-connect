@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <div className="container footer-content">
         <div className="footer-feature">
           <div className="footer-brand-block"><Brand /><span className="footer-kicker">FAITH · FELLOWSHIP · SERVICE</span></div>
-          <p className="footer-mission">Peace Congregation is a church family growing in faith, fellowship and service through the Presbyterian Church of Ghana.</p>
+          <p className="footer-mission">PEACE (SUMALISM) CONGREGATION is a church family growing in faith, fellowship and service through the Presbyterian Church of Ghana.</p>
           <a className="footer-contact-cta" href="/contact"><span className="footer-cta-icon"><Icon name="arrow-up-right" size={18} /></span><span><strong>Connect with us</strong><small>We would love to hear from you</small></span></a>
         </div>
         <div className="footer-column"><span className="footer-heading">Discover</span><a href="/about">About Peace Congregation</a><a href="/ministries">Church Groups & Ministries</a><a href="/events">Events & Programmes</a></div>
