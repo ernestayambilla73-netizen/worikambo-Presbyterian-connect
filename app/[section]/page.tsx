@@ -5,7 +5,7 @@ type Props={params:Promise<{section:string}>};
 type MinistryLogo={src?:string;label:string;alt:string};
 const ministryLogos:Record<string,MinistryLogo>={
   "Children's Service":{src:"https://static.wixstatic.com/media/8d370a_1154dcfd27854c85b68946c94d41426b~mv2.png/v1/fill/w_640%2Ch_586%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/shutterstock_1898354080.png",label:"CS",alt:"Presbyterian Children's Service emblem"},
-  "Junior Youth (JY)":{src:"https://osueben-ezer.com/assets/img/JYlogo.png",label:"JY",alt:"Presbyterian Junior Youth logo"},
+  "Junior Youth (JY)":{src:"https://logodix.com/logo/1754052.png",label:"JY",alt:"Presbyterian Church of Ghana Junior Youth logo"},
   "Young People's Guild (YPG)":{src:"https://pbs.twimg.com/media/Fa1QL4VWYAMGo0J.jpg",label:"YPG",alt:"Presbyterian Young People's Guild logo"},
   "Young Adults' Fellowship (YAF)":{src:"https://www.osueben-ezer.com/assets/img/YAFogo.png",label:"YAF",alt:"Presbyterian Young Adults' Fellowship logo"},
   "Women's Fellowship":{label:"WF",alt:"Women's Fellowship official logo not yet verified"},
