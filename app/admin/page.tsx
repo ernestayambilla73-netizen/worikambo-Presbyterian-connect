@@ -109,7 +109,7 @@ export default function AdminDashboard() {
   setBusy(false);
  }
  async function signOut() { await supabase.auth.signOut(); setAuthorized(false); setSession(null); setRows([]); setNotice("Signed out."); }
- function startNew() { setDraft({...blank(module), album: module.album, is_published: false}); setMediaFiles({}); setEditing(true); setError(""); setNotice(""); }
+ function startNew() { setDraft({...blank(module), album: module.album, is_published: true}); setMediaFiles({}); setEditing(true); setError(""); setNotice(""); }
  function startEdit(row: Row) {
   const copy = {...row};
   if (copy.event_date) copy.event_date = String(copy.event_date).slice(0,16);
@@ -131,7 +131,7 @@ export default function AdminDashboard() {
     const image_url = supabase.storage.from("church-gallery").getPublicUrl(path).data.publicUrl;
     const {error:insertError} = await supabase.from("church_gallery").insert({
       title, caption: "", album: module.album, event_date: null, image_url,
-      is_published: false, created_by: session.id, updated_at: new Date().toISOString()
+      is_published: true, created_by: session.id, updated_at: new Date().toISOString()
     });
     if (insertError) failures.push(file.name + ": " + insertError.message);
     else uploaded++;
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
   setBulkUploading(false); setBusy(false);
   if (failures.length) {
    setError(`Uploaded ${uploaded} of ${bulkFiles.length} photos. ` + failures.slice(0,3).join(" | "));
-  } else setNotice(`Uploaded ${uploaded} photo${uploaded===1?"":"s"} as draft${uploaded===1?"":"s"}. Review the previews below, edit captions if needed, then tick the publish box to make them public.`);
+  } else setNotice(`Saved and published ${uploaded} photo${uploaded===1?"":"s"}. They are now available on the public ${module.album === "Homepage Slideshow" ? "homepage slideshow" : "church gallery"} and are listed below for review or deletion.`);
   await load();
  }
  async function save(e: React.FormEvent) {
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
   else if (module.table !== "church_congregations" && module.table !== "church_ministries") payload.created_by = session.id;
   const {error} = await supabase.from(module.table).upsert(payload, {onConflict:module.key});
   if (error) setError(error.message);
-  else { setNotice("Saved to the Peace Congregation database."); setEditing(false); setMediaFiles({}); await load(); }
+  else { setNotice(payload.is_published ? "Saved and published successfully. The image is now visible on the public website and in this administrator list." : "Saved successfully as a draft. It is visible in this administrator list; tick the publish option and save again to show it publicly."); setEditing(false); setMediaFiles({}); await load(); }
   setBusy(false);
  }
  async function remove(row: Row) {
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
    {modules.map(m=><button key={m.table + ":" + m.album} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table + ":" + m.album] ?? "—"}</strong><span>{m.label}</span></button>)}
    <a className="admin-summary-card" href="/admin/members"><strong>↗</strong><span>Member registration &amp; death records</span></a>
   </div>
-  <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register, death records &amp; groups ↗</a>{modules.map((m,i)=><button key={m.table + ":" + m.album} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
+  <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register, death records &amp; groups ↗</a>{modules.map((m,i)=><button key={m.table + ":" + m.album} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<div className="admin-public-links"><strong>Navigate public website</strong>{[["Home","/"],["About","/about"],["Ministries","/ministries"],["News","/news"],["Events","/events"],["Gallery","/gallery"],["Contact","/contact"]].map(([label,href])=><a key={href} href={href} target="_blank" rel="noreferrer">{label} ↗</a>)}</div><a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
    <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? (module.album === "Homepage Slideshow" ? "Upload slide images separately here. New images stay as drafts until you preview and approve them. Only approved slides appear in the homepage carousel." : "Review all church-gallery photos here. New uploads remain drafts until you inspect each preview and approve publication. Homepage slideshow items are managed separately.") : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
     {notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}
     {module.table === "church_gallery" && <section className="admin-editor bulk-photo-upload">
