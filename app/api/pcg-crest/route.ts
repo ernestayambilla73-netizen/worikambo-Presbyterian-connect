@@ -1,3 +1,5 @@
+import sharp from "sharp";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -17,10 +19,18 @@ export async function GET() {
       if (!response.ok || !contentType.includes("image/")) continue;
       const image = await response.arrayBuffer();
       if (!image.byteLength) continue;
-      return new Response(image, {
+      // Add clear white breathing room so the complete official crest fits
+      // inside Android adaptive/launcher icon masks instead of touching edges.
+      const paddedIcon = await sharp(Buffer.from(image))
+        .rotate()
+        .resize(384, 384, { fit: "contain", background: "#ffffff" })
+        .extend({ top: 64, bottom: 64, left: 64, right: 64, background: "#ffffff" })
+        .png()
+        .toBuffer();
+      return new Response(new Uint8Array(paddedIcon), {
         status: 200,
         headers: {
-          "Content-Type": contentType.includes("png") ? "image/png" : contentType,
+          "Content-Type": "image/png",
           "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
           "X-Content-Type-Options": "nosniff",
         },
