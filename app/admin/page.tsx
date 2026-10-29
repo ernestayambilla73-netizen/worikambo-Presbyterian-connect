@@ -161,7 +161,7 @@ export default function AdminDashboard() {
   <div className="admin-top"><div><span className="eyebrow">CONTROL CENTRE</span><h1>Peace Congregation administration</h1><p>Signed in as {session.email}. Changes are stored in Supabase PostgreSQL.</p></div><button className="btn btn-secondary" onClick={signOut}>Sign out</button></div>
   
   <div className="admin-summary">
-   {modules.map(m=><button key={m.table} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table] ?? "—"}</strong><span>{m.label}</span></button>)}
+   {modules.map(m=><button key={m.table} className="admin-summary-card" onClick={()=>{setActive(modules.indexOf(m));setEditing(false);}}><strong>{counts[m.table + ":" + m.album] ?? "—"}</strong><span>{m.label}</span></button>)}
    <a className="admin-summary-card" href="/admin/members"><strong>↗</strong><span>Member registration &amp; death records</span></a>
   </div>
   <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register, death records &amp; groups ↗</a>{modules.map((m,i)=><button key={m.table} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
