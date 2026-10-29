@@ -6,11 +6,13 @@ import QuickAccess from "../../components/QuickAccess";
 
 type Row = Record<string, any>;
 type Field = { key: string; label: string; type?: string; required?: boolean; options?: string[] };
-type Module = { label: string; table: string; key: string; fields: Field[]; columns: string[]; private?: boolean };
+type Module = { label: string; table: string; key: string; fields: Field[]; columns: string[]; private?: boolean; album: string };
 
 const modules: Module[] = [
- { label: "Hero slideshow & gallery", table: "church_gallery", key: "id", columns: ["title","album","event_date","is_published"], fields: [
-  {key:"title",label:"Photo title",required:true},{key:"caption",label:"Caption / story",type:"textarea"},{key:"album",label:"Album / category",required:true},{key:"event_date",label:"Event date",type:"date"},{key:"image_url",label:"Photo (upload image)",type:"image",required:true},{key:"is_published",label:"Publish publicly",type:"checkbox"}]}
+ { label: "Homepage slideshow", album: "Homepage Slideshow", table: "church_gallery", key: "id", columns: ["image_url","title","caption","is_published","created_at"], fields: [
+  {key:"title",label:"Slide title",required:true},{key:"caption",label:"Slide caption",type:"textarea"},{key:"album",label:"Collection",required:true},{key:"event_date",label:"Display date",type:"date"},{key:"image_url",label:"Slide image (upload from device)",type:"image",required:true},{key:"is_published",label:"Approve and publish on homepage",type:"checkbox"}]},
+ { label: "Church gallery", album: "Church Life", table: "church_gallery", key: "id", columns: ["image_url","title","caption","album","is_published"], fields: [
+  {key:"title",label:"Photo title",required:true},{key:"caption",label:"Caption / story",type:"textarea"},{key:"album",label:"Album / category",required:true},{key:"event_date",label:"Event date",type:"date"},{key:"image_url",label:"Photo (upload image)",type:"image",required:true},{key:"is_published",label:"Approve and publish in gallery",type:"checkbox"}]}
 ];
 
 const blank = (m: Module): Row => Object.fromEntries(m.fields.map(f => [f.key, f.type === "checkbox" ? false : ""]));
@@ -56,13 +58,17 @@ export default function AdminDashboard() {
   if (!authorized) return;
   setBusy(true); setError("");
   const results = await Promise.all(modules.map(async m => {
-   const {data,error} = await supabase.from(m.table).select("*").order(m.table === "church_page_content" ? "slug" : "created_at", {ascending:false}).limit(200);
-   return {table:m.table,count:data?.length ?? 0,error};
+   let query = supabase.from(m.table).select("*").order(m.table === "church_page_content" ? "slug" : "created_at", {ascending:false});
+   if (m.table === "church_gallery") query = query.eq("album", m.album);
+   const {data,error} = await query.limit(200);
+   return {table:m.table + ":" + m.album,count:data?.length ?? 0,error};
   }));
   const nextCounts:Record<string,number> = {};
   results.forEach(r => { nextCounts[r.table] = r.count; });
   setCounts(nextCounts);
-  const {data,error} = await supabase.from(module.table).select("*").order(module.table === "church_page_content" ? "slug" : "created_at", {ascending:false}).limit(200);
+  let query = supabase.from(module.table).select("*").order(module.table === "church_page_content" ? "slug" : "created_at", {ascending:false});
+  if (module.table === "church_gallery") query = query.eq("album", module.album);
+  const {data,error} = await query.limit(200);
   if (error) setError(error.message); else setRows(data ?? []);
   setBusy(false);
  }, [authorized, module, supabase]);
@@ -83,7 +89,7 @@ export default function AdminDashboard() {
   setBusy(false);
  }
  async function signOut() { await supabase.auth.signOut(); setAuthorized(false); setSession(null); setRows([]); setNotice("Signed out."); }
- function startNew() { setDraft(blank(module)); setMediaFiles({}); setEditing(true); setError(""); setNotice(""); }
+ function startNew() { setDraft({...blank(module), album: module.album, is_published: false}); setMediaFiles({}); setEditing(true); setError(""); setNotice(""); }
  function startEdit(row: Row) {
   const copy = {...row};
   if (copy.event_date) copy.event_date = String(copy.event_date).slice(0,16);
@@ -104,8 +110,8 @@ export default function AdminDashboard() {
     const title = file.name.replace(/\\.[^.]+$/,"").replace(/[_-]+/g," ").trim() || "Church photo";
     const image_url = supabase.storage.from("church-gallery").getPublicUrl(path).data.publicUrl;
     const {error:insertError} = await supabase.from("church_gallery").insert({
-      title, caption: "", album: "Church Life", event_date: null, image_url,
-      is_published: true, created_by: session.id, updated_at: new Date().toISOString()
+      title, caption: "", album: module.album, event_date: null, image_url,
+      is_published: false, created_by: session.id, updated_at: new Date().toISOString()
     });
     if (insertError) failures.push(file.name + ": " + insertError.message);
     else uploaded++;
@@ -115,7 +121,7 @@ export default function AdminDashboard() {
   setBulkUploading(false); setBusy(false);
   if (failures.length) {
    setError(`Uploaded ${uploaded} of ${bulkFiles.length} photos. ` + failures.slice(0,3).join(" | "));
-  } else setNotice(`Successfully uploaded and published ${uploaded} photo${uploaded===1?"":"s"}. Titles came from the filenames; you can edit them later.`);
+  } else setNotice(`Uploaded ${uploaded} photo${uploaded===1?"":"s"} as draft${uploaded===1?"":"s"}. Review the previews below, edit captions if needed, then tick the publish box to make them public.`);
   await load();
  }
  async function save(e: React.FormEvent) {
@@ -167,13 +173,13 @@ export default function AdminDashboard() {
         <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={e=>{const selected=Array.from(e.target.files ?? []);const tooLarge=selected.find(file=>file.size>10*1024*1024);if(tooLarge){setError(`${tooLarge.name} is larger than 10 MB. Choose smaller images.`);e.currentTarget.value="";return;}setBulkFiles(selected);setError("");}} />
       </label>
       {bulkFiles.length>0 && <div className="bulk-photo-summary"><strong>{bulkFiles.length} photo{bulkFiles.length===1?"":"s"} selected</strong><ul>{bulkFiles.map((file,i)=><li key={file.name+i}>{file.name}</li>)}</ul><button type="button" className="admin-close" onClick={()=>setBulkFiles([])}>Clear selection</button></div>}
-      <p className="admin-muted">Photos are automatically titled from their filenames, placed in “Church Life”, and published to the homepage slideshow and gallery. You can edit details later.</p>
+      <p className="admin-muted">Photos are automatically titled from their filenames and saved to “{module.album}” as drafts. Check the image previews below, then edit and publish only the pictures you approve.</p>
       <button type="button" className="btn" disabled={!bulkFiles.length || busy} onClick={uploadMany}>{bulkUploading?"Uploading photos…":`Upload ${bulkFiles.length||""} selected photo${bulkFiles.length===1?"":"s"}`}</button>
     </section>}
     {editing && <form className="admin-editor" onSubmit={save}><div className="admin-editor-head"><h3>{draft[module.key] ? "Edit record" : "Create record"}</h3><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Cancel</button></div><div className="admin-fields">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"wide":""}>{f.label}{f.type==="textarea" ? <textarea placeholder={module.table==="church_posts" && f.key==="body" && draft.post_type==="service_programme" ? "Preacher: Rev. / Mr / Ms ...\nService leader: ...\nCall to worship: Psalm ...\nFirst Bible reading: Name — Book chapter:verses\nSecond Bible reading: Name — Book chapter:verses\nThird Bible reading: Name — Book chapter:verses\nSermon text/theme: ...\nHymns: ...\nNotices / other roles: ..." : undefined} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/> : f.type==="image" ? <><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file){if(file.size>10*1024*1024){setError("Choose an image smaller than 10 MB.");e.currentTarget.value="";return;}setMediaFiles({...mediaFiles,[f.key]:file});setError("");}}} required={!!f.required && !draft[f.key]}/>{(mediaFiles[f.key]||draft[f.key])&&<small>{mediaFiles[f.key]?.name || "Current image saved"}{draft[f.key]&&!mediaFiles[f.key]&&<> · <a href={draft[f.key]} target="_blank" rel="noreferrer">View current image</a></>}</small>}</> : f.type==="checkbox" ? <input type="checkbox" checked={!!draft[f.key]} onChange={e=>setDraft({...draft,[f.key]:e.target.checked})}/> : f.type==="select" ? <select value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}><option value="">Choose…</option>{f.options?.map(o=><option key={o} value={o}>{o.replaceAll("_"," ")}</option>)}</select> : <input type={f.type ?? "text"} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required} readOnly={f.key===module.key && !!draft[f.key] && module.key==="slug"}/>}</label>)}</div><button className="btn" disabled={busy}>{busy?"Saving…":"Save changes"}</button></form>}
-    <div className="admin-table-wrap">{busy && <p className="admin-muted">Loading…</p>}<table className="data-table"><thead><tr>{module.columns.map(c=><th key={c}>{c.replaceAll("_"," ")}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row[module.key]}>{module.columns.map(c=><td key={c}>{display(row[c])}</td>)}<td><div className="admin-row-actions"><button onClick={()=>startEdit(row)}>Edit</button><button className="danger" onClick={()=>remove(row)}>Delete</button></div></td></tr>)}{!rows.length && !busy && <tr><td colSpan={module.columns.length+1}>No records yet. Select “Add new” to create the first one.</td></tr>}</tbody></table></div>
+    <div className="admin-table-wrap">{busy && <p className="admin-muted">Loading…</p>}<table className="data-table"><thead><tr>{module.columns.map(c=><th key={c}>{c.replaceAll("_"," ")}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row[module.key]}>{module.columns.map(c=><td key={c}>{c === "image_url" && row[c] ? <a href={row[c]} target="_blank" rel="noreferrer" className="admin-image-preview-link"><img className="admin-image-preview" src={row[c]} alt={row.title || "Uploaded church image"} loading="lazy"/><small>Open full image ↗</small></a> : c === "is_published" ? <span className={row[c] ? "status" : "status pending"}>{row[c] ? "Published" : "Draft · review"}</span> : display(row[c])}</td>)}<td><div className="admin-row-actions"><button onClick={()=>startEdit(row)}>Edit</button><button className="danger" onClick={()=>remove(row)}>Delete</button></div></td></tr>)}{!rows.length && !busy && <tr><td colSpan={module.columns.length+1}>No records yet. Select “Add new” to create the first one.</td></tr>}</tbody></table></div>
    </section>
   </div>
-  <p className="admin-footnote">Security: database row-level security enforces administrator access. Never place a Supabase service-role key in this website.</p>
+  <p className="admin-footnote">Review workflow: every new image starts as a draft. Preview it, edit its title/caption, and publish only after checking it. You can delete an incorrect image from Actions. Security: database row-level security enforces administrator access. Never place a Supabase service-role key in this website.</p>
  </div></main>;
 }
