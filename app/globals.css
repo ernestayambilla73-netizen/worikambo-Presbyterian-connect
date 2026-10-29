@@ -71,8 +71,8 @@
 
 
 /* App identity and install controls */
-.brand-image{display:block;flex:0 0 49px;width:49px;height:49px;object-fit:contain;border-radius:14px;box-shadow:0 8px 18px #173f9824}
-.site-footer .brand-image{box-shadow:0 10px 24px #0003}
+.brand-image{display:block;flex:0 0 49px;width:49px;height:49px;padding:3px;box-sizing:border-box;object-fit:contain;object-position:center;border-radius:14px;background:#fff;box-shadow:0 8px 18px #173f9824}
+.site-footer .brand-image{padding:3px;background:#fff;box-shadow:0 10px 24px #0003}
 .install-app{position:fixed;z-index:80;right:18px;bottom:18px;width:min(410px,calc(100vw - 28px));padding:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;background:rgba(255,255,255,.97);border:1px solid #dbe4f5;border-radius:18px;box-shadow:0 16px 48px #102b6828;backdrop-filter:blur(14px)}
 .install-app-copy{display:flex;align-items:center;gap:10px;min-width:0}.install-app-copy img{flex-shrink:0;border-radius:10px}.install-app-copy strong,.install-app-copy small{display:block}.install-app-copy strong{font-size:12px;line-height:1.35;color:#102b68}.install-app-copy small{font-size:10px;line-height:1.4;color:#657087;margin-top:3px}
 .install-app-button{border:0;border-radius:11px;background:#173f98;color:#fff;padding:11px 13px;font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer}.install-app-button:hover{background:#102b68}.install-app-message{grid-column:1/-1;margin:0;padding:9px 10px;border-radius:9px;background:#f0f4ff;color:#354d80;font-size:11px;line-height:1.6}
@@ -382,3 +382,11 @@ h1 span{color:#0868cf}
   .hero-slide-image{width:100%;max-width:100%;aspect-ratio:4/3;min-height:0;height:auto;margin-inline:auto;border-radius:18px}
   .hero-slide-empty-state{min-height:250px;border-radius:18px;padding:22px}
 }
+
+
+/* Administrator navigation shortcuts */
+.admin-public-links{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:16px;padding-top:14px;border-top:1px solid #ffffff35}
+.admin-public-links strong{grid-column:1/-1;color:#fff;font-size:11px;letter-spacing:.4px;padding:3px 9px 5px}
+.admin-sidebar .admin-public-links a{margin:0;padding:8px 9px;font-size:12px;color:#fff;background:#ffffff10}
+.admin-sidebar .admin-public-links a:hover{background:#ffffff24}
+@media(max-width:800px){.admin-public-links{grid-column:1/-1}}
