@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   applicationName: "PEACE (SUMALISM) CONGREGATION",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "PEACE (SUMALISM) CONGREGATION" },
-  icons: { icon: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png", shortcut: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png", apple: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png" },
+  icons: { icon: [{ url: "/api/pcg-crest", type: "image/png" }], shortcut: ["/api/pcg-crest"], apple: [{ url: "/api/pcg-crest", type: "image/png" }] },
 };
 
 export const viewport: Viewport = {
@@ -22,7 +22,7 @@ export const viewport: Viewport = {
 
 function Brand() {
   return <a className="brand" href="/" aria-label="PEACE (SUMALISM) CONGREGATION home">
-    <img className="brand-image" src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png" width="49" height="49" alt="Presbyterian Church of Ghana crest" />
+    <img className="brand-image" src="/api/pcg-crest" width="49" height="49" alt="Presbyterian Church of Ghana crest" />
     <span>PEACE<br/>(SUMALISM)<br/>CONGREGATION<small>PRESBYTERIAN CHURCH OF GHANA</small></span>
   </a>;
 }
