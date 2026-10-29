@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#173f98",
+  themeColor: "#102b54",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -28,8 +28,9 @@ function Brand() {
 }
 
 const nav = [
-  ["Home", "/"], ["About", "/about"], ["Peace Congregation", "/about"],
-  ["Ministries", "/ministries"], ["Resources", "/resources"], ["News", "/news"], ["Gallery", "/gallery"], ["Events", "/events"]
+  ["Home", "/"], ["About", "/about"], ["Ministries", "/ministries"],
+  ["Worship", "/sunday-service"], ["Events", "/events"], ["News", "/news"],
+  ["Gallery", "/gallery"], ["Resources", "/resources"]
 ];
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
