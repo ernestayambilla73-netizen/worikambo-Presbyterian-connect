@@ -10,16 +10,16 @@
   "theme_color": "#173f98",
   "icons": [
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png",
+      "src": "/api/pcg-crest",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png",
+      "src": "/api/pcg-crest",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
