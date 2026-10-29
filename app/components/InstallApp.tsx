@@ -56,7 +56,7 @@ export default function InstallApp() {
   if (installed) return null;
 
   return <aside className="install-app" aria-label="Install app">
-    <div className="install-app-copy"><img src="/pcg-connect-mark.svg" alt="" width="38" height="38"/><span><strong>Take Peace Congregation with you</strong><small>Install PEACE (SUMALISM) CONGREGATION on your phone</small></span></div>
+    <div className="install-app-copy"><img src="/api/pcg-crest" alt="Presbyterian Church of Ghana crest" width="38" height="38" style={{objectFit:"contain",padding:4,background:"#fff",borderRadius:10}}/><span><strong>Take Peace Congregation with you</strong><small>Install PEACE (SUMALISM) CONGREGATION on your phone</small></span></div>
     <button type="button" className="install-app-button" onClick={install}>{installed ? "App installed" : "Install app"}</button>
     {message && <p className="install-app-message" role="status">{message}</p>}
   </aside>;
