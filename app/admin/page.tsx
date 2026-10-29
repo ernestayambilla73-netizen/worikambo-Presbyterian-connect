@@ -27,6 +27,7 @@ export default function AdminDashboard() {
  const [checking, setChecking] = useState(true);
  const [active, setActive] = useState(0);
  const [rows, setRows] = useState<Row[]>([]);
+ const [previewUrls, setPreviewUrls] = useState<Record<string,string>>({});
  const [draft, setDraft] = useState<Row>({});
  const [editing, setEditing] = useState(false);
  const [busy, setBusy] = useState(false);
@@ -74,6 +75,25 @@ export default function AdminDashboard() {
  }, [authorized, module, supabase]);
 
  useEffect(() => { load(); }, [load]);
+
+ useEffect(() => {
+  let cancelled = false;
+  async function buildPreviews() {
+   const next: Record<string,string> = {};
+   for (const row of rows) {
+    const marker = "/object/public/church-gallery/";
+    const source = String(row.image_url || "");
+    const position = source.indexOf(marker);
+    if (position < 0) continue;
+    const path = decodeURIComponent(source.slice(position + marker.length));
+    const {data} = await supabase.storage.from("church-gallery").createSignedUrl(path, 3600);
+    if (data?.signedUrl) next[row.id] = data.signedUrl;
+   }
+   if (!cancelled) setPreviewUrls(next);
+  }
+  void buildPreviews();
+  return () => { cancelled = true; };
+ }, [rows, supabase]);
 
  async function signIn(e: React.FormEvent) {
   e.preventDefault(); setBusy(true); setError(""); setNotice("");
@@ -188,8 +208,8 @@ export default function AdminDashboard() {
       <p className="admin-muted">Photos are automatically titled from their filenames and saved to “{module.album}” as drafts. Check the image previews below, then edit and publish only the pictures you approve.</p>
       <button type="button" className="btn" disabled={!bulkFiles.length || busy} onClick={uploadMany}>{bulkUploading?"Uploading photos…":`Upload ${bulkFiles.length||""} selected photo${bulkFiles.length===1?"":"s"}`}</button>
     </section>}
-    {editing && <form className="admin-editor" onSubmit={save}><div className="admin-editor-head"><h3>{draft[module.key] ? "Edit record" : "Create record"}</h3><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Cancel</button></div><div className="admin-fields">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"wide":""}>{f.label}{f.type==="textarea" ? <textarea placeholder={module.table==="church_posts" && f.key==="body" && draft.post_type==="service_programme" ? "Preacher: Rev. / Mr / Ms ...\nService leader: ...\nCall to worship: Psalm ...\nFirst Bible reading: Name — Book chapter:verses\nSecond Bible reading: Name — Book chapter:verses\nThird Bible reading: Name — Book chapter:verses\nSermon text/theme: ...\nHymns: ...\nNotices / other roles: ..." : undefined} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/> : f.type==="image" ? <><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file){if(file.size>10*1024*1024){setError("Choose an image smaller than 10 MB.");e.currentTarget.value="";return;}setMediaFiles({...mediaFiles,[f.key]:file});setError("");}}} required={!!f.required && !draft[f.key]}/>{(mediaFiles[f.key]||draft[f.key])&&<small>{mediaFiles[f.key]?.name || "Current image saved"}{draft[f.key]&&!mediaFiles[f.key]&&<> · <a href={draft[f.key]} target="_blank" rel="noreferrer">View current image</a></>}</small>}</> : f.type==="checkbox" ? <input type="checkbox" checked={!!draft[f.key]} onChange={e=>setDraft({...draft,[f.key]:e.target.checked})}/> : f.type==="select" ? <select value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}><option value="">Choose…</option>{f.options?.map(o=><option key={o} value={o}>{o.replaceAll("_"," ")}</option>)}</select> : <input type={f.type ?? "text"} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required} readOnly={f.key===module.key && !!draft[f.key] && module.key==="slug"}/>}</label>)}</div><button className="btn" disabled={busy}>{busy?"Saving…":"Save changes"}</button></form>}
-    <div className="admin-table-wrap">{busy && <p className="admin-muted">Loading…</p>}<table className="data-table"><thead><tr>{module.columns.map(c=><th key={c}>{c.replaceAll("_"," ")}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row[module.key]}>{module.columns.map(c=><td key={c}>{c === "image_url" && row[c] ? <a href={row[c]} target="_blank" rel="noreferrer" className="admin-image-preview-link"><img className="admin-image-preview" src={row[c]} alt={row.title || "Uploaded church image"} loading="lazy"/><small>Open full image ↗</small></a> : c === "is_published" ? <span className={row[c] ? "status" : "status pending"}>{row[c] ? "Published" : "Draft · review"}</span> : display(row[c])}</td>)}<td><div className="admin-row-actions"><button onClick={()=>startEdit(row)}>Edit</button><button className="danger" onClick={()=>remove(row)}>Delete</button></div></td></tr>)}{!rows.length && !busy && <tr><td colSpan={module.columns.length+1}>No records yet. Select “Add new” to create the first one.</td></tr>}</tbody></table></div>
+    {editing && <form className="admin-editor" onSubmit={save}><div className="admin-editor-head"><h3>{draft[module.key] ? "Edit record" : "Create record"}</h3><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Cancel</button></div><div className="admin-fields">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"wide":""}>{f.label}{f.type==="textarea" ? <textarea placeholder={module.table==="church_posts" && f.key==="body" && draft.post_type==="service_programme" ? "Preacher: Rev. / Mr / Ms ...\nService leader: ...\nCall to worship: Psalm ...\nFirst Bible reading: Name — Book chapter:verses\nSecond Bible reading: Name — Book chapter:verses\nThird Bible reading: Name — Book chapter:verses\nSermon text/theme: ...\nHymns: ...\nNotices / other roles: ..." : undefined} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/> : f.type==="image" ? <><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file){if(file.size>10*1024*1024){setError("Choose an image smaller than 10 MB.");e.currentTarget.value="";return;}setMediaFiles({...mediaFiles,[f.key]:file});setError("");}}} required={!!f.required && !draft[f.key]}/>{(mediaFiles[f.key]||draft[f.key])&&<small>{mediaFiles[f.key]?.name || "Current image saved"}{draft[f.key]&&!mediaFiles[f.key]&&<> · <a href={previewUrls[draft.id] || draft[f.key]} target="_blank" rel="noreferrer">View current image</a></>}</small>}</> : f.type==="checkbox" ? <input type="checkbox" checked={!!draft[f.key]} onChange={e=>setDraft({...draft,[f.key]:e.target.checked})}/> : f.type==="select" ? <select value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}><option value="">Choose…</option>{f.options?.map(o=><option key={o} value={o}>{o.replaceAll("_"," ")}</option>)}</select> : <input type={f.type ?? "text"} value={draft[f.key] ?? ""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required} readOnly={f.key===module.key && !!draft[f.key] && module.key==="slug"}/>}</label>)}</div><button className="btn" disabled={busy}>{busy?"Saving…":"Save changes"}</button></form>}
+    <div className="admin-table-wrap">{busy && <p className="admin-muted">Loading…</p>}<table className="data-table"><thead><tr>{module.columns.map(c=><th key={c}>{c.replaceAll("_"," ")}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row[module.key]}>{module.columns.map(c=><td key={c}>{c === "image_url" && row[c] ? <a href={previewUrls[row.id] || row[c]} target="_blank" rel="noreferrer" className="admin-image-preview-link"><img className="admin-image-preview" src={previewUrls[row.id] || row[c]} alt={row.title || "Uploaded church image"} loading="lazy"/><small>Open full image ↗</small></a> : c === "is_published" ? <span className={row[c] ? "status" : "status pending"}>{row[c] ? "Published" : "Draft · review"}</span> : display(row[c])}</td>)}<td><div className="admin-row-actions"><button onClick={()=>startEdit(row)}>Edit</button><button className="danger" onClick={()=>remove(row)}>Delete</button></div></td></tr>)}{!rows.length && !busy && <tr><td colSpan={module.columns.length+1}>No records yet. Select “Add new” to create the first one.</td></tr>}</tbody></table></div>
    </section>
   </div>
   <p className="admin-footnote">Review workflow: every new image starts as a draft. Preview it, edit its title/caption, and publish only after checking it. You can delete an incorrect image from Actions. Security: database row-level security enforces administrator access. Never place a Supabase service-role key in this website.</p>
