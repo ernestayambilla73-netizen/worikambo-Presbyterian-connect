@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   applicationName: "PEACE (SUMALISM) CONGREGATION",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "PEACE (SUMALISM) CONGREGATION" },
-  icons: { icon: "/pcg-connect-mark.svg", shortcut: "/pcg-connect-mark.svg", apple: "/pcg-connect-mark.svg" },
+  icons: { icon: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png", shortcut: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png", apple: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Presbyterian_Church_of_Ghana_Crest.png" },
 };
 
 export const viewport: Viewport = {
