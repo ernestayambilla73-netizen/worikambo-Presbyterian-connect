@@ -390,3 +390,72 @@ h1 span{color:#0868cf}
 .admin-sidebar .admin-public-links a{margin:0;padding:8px 9px;font-size:12px;color:#fff;background:#ffffff10}
 .admin-sidebar .admin-public-links a:hover{background:#ffffff24}
 @media(max-width:800px){.admin-public-links{grid-column:1/-1}}
+
+
+/* Presbyterian visual system and homepage-first slideshow layout */
+:root{
+  --blue:#174b91;
+  --blue-deep:#102b54;
+  --blue-soft:#edf3fb;
+  --red:#8d1f35;
+  --ink:#17263b;
+  --muted:#5d6b7e;
+  --line:#dce4ef;
+  --surface:#f6f8fb;
+  --shadow:0 18px 46px rgba(16,43,84,.09);
+}
+.topline{height:5px;background:linear-gradient(90deg,#102b54 0 57%,#174b91 57% 78%,#8d1f35 78% 94%,#c6a45b 94% 100%)}
+.site-header{box-shadow:0 8px 28px rgba(16,43,84,.045)}
+.brand-image{display:block;object-fit:contain;background:#fff;padding:4px;border-radius:12px}
+.nav-links a{font-size:12px}
+.nav-links .nav-cta,.btn{background:#174b91;border-color:#174b91}
+.nav-links .nav-cta:hover,.btn:hover{background:#102b54;border-color:#102b54}
+.btn-red{background:#8d1f35;border-color:#8d1f35}
+.eyebrow{color:#8d1f35}
+.eyebrow:before{background:#c6a45b}
+.text-link{color:#8d1f35}
+.text-link:hover{color:#174b91}
+.card-icon{background:#edf3fb;color:#174b91}
+.verse-band{background:linear-gradient(115deg,#102b54,#174b91 72%,#203e6a)}
+.site-footer:before{background:radial-gradient(ellipse at 12% 0%,#174b914d,transparent 43%),linear-gradient(125deg,#091a33,#102b54 62%,#071326)}
+.footer-glow{background:linear-gradient(90deg,#8d1f35 0 18%,#c6a45b 18% 20%,#174b91 20% 100%)}
+.homepage-slideshow-hero{position:relative;padding:22px 0 30px;background:linear-gradient(180deg,#eef3fa 0%,#fff 100%);border-bottom:1px solid #dce4ef}
+.homepage-slideshow-wrap{width:min(1240px,calc(100% - 48px));margin:0 auto}
+.homepage-slideshow-wrap .hero-slideshow,.homepage-slideshow-wrap .hero-slideshow-empty{width:100%;max-width:none;min-width:0;justify-self:stretch}
+.homepage-slideshow-wrap .hero-slide-image{width:100%;aspect-ratio:16/7;min-height:300px;height:auto;max-height:590px;border-radius:22px;background:#102b54}
+.homepage-slideshow-wrap .hero-slide-image img{object-fit:cover;object-position:center}
+.homepage-slideshow-wrap .hero-slide-copy{left:clamp(24px,5vw,62px);right:clamp(24px,5vw,62px);bottom:clamp(68px,7vw,88px);max-width:700px}
+.homepage-slideshow-wrap .hero-slide-copy h2{font-size:clamp(28px,4.4vw,52px);max-width:760px}
+.homepage-slideshow-wrap .hero-slide-copy p{font-size:clamp(12px,1.3vw,15px);max-width:620px}
+.homepage-slideshow-wrap .hero-slide-controls{right:22px;bottom:20px}
+.homepage-slideshow-wrap .hero-slide-dots{padding-top:13px}
+.homepage-slideshow-wrap .hero-slide-dots button.active{background:#8d1f35}
+.homepage-slideshow-wrap .hero-slide-empty-state{min-height:clamp(280px,40vw,480px);border-color:#c6d2e2;background:linear-gradient(135deg,#f7f9fc,#eaf0f8)}
+.hero-intro{position:relative;overflow:hidden;background:radial-gradient(ellipse at 90% 10%,#e3ebf7 0,transparent 38%),linear-gradient(125deg,#f6f8fc 0%,#fff 62%,#fffafa 100%);border-bottom:1px solid var(--line)}
+.hero-intro-inner{position:relative;width:min(1240px,100%);margin:0 auto;padding:48px 28px 54px;display:block}
+.hero-intro-inner>div{max-width:900px}
+.hero-intro h1{font-size:clamp(38px,5vw,62px);letter-spacing:-2px;line-height:1.06;margin:14px 0 16px;max-width:850px}
+.hero-intro h1 span{color:#174b91}
+.hero-intro .lead{max-width:780px;margin:0;font-size:16px}
+.hero-intro .hero-actions{margin:22px 0 12px}
+.hero-intro .small{display:block;margin:12px 0 0;letter-spacing:.35px}
+.section-heading h2,.page-title{color:#102b54}
+.card h3,.hero-panel h3{color:#102b54}
+.admin-sidebar{background:linear-gradient(160deg,#102b54,#174b91)}
+@media(max-width:700px){
+  .homepage-slideshow-hero{padding:12px 0 20px}
+  .homepage-slideshow-wrap{width:calc(100% - 24px)}
+  .homepage-slideshow-wrap .hero-slide-image{aspect-ratio:4/3;min-height:0;height:auto;max-height:none;border-radius:16px}
+  .homepage-slideshow-wrap .hero-slide-copy{left:16px;right:16px;bottom:62px}
+  .homepage-slideshow-wrap .hero-slide-copy h2{font-size:clamp(22px,6vw,30px);margin:8px 0}
+  .homepage-slideshow-wrap .hero-slide-copy p{font-size:12px;line-height:1.45}
+  .homepage-slideshow-wrap .hero-slide-controls{right:10px;bottom:10px}
+  .homepage-slideshow-wrap .hero-slide-controls button{width:31px;height:31px}
+  .homepage-slideshow-wrap .hero-slide-dots{padding:10px 0 0}
+  .hero-intro-inner{padding:35px 18px 38px}
+  .hero-intro h1{font-size:clamp(37px,10vw,50px);letter-spacing:-1.5px}
+  .hero-intro .lead{font-size:14px;line-height:1.8}
+}
+@media(prefers-reduced-motion:reduce){
+  .homepage-slideshow-wrap .hero-slide-image img{animation:none}
+}
