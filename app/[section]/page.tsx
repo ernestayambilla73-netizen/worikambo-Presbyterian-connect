@@ -4,17 +4,17 @@ import { createClient } from "../../lib/supabase/server";
 type Props={params:Promise<{section:string}>};
 type MinistryLogo={src?:string;label:string;alt:string};
 const ministryLogos:Record<string,MinistryLogo>={
-  "Children's Service":{src:"https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png",label:"CS",alt:"Children's Service ministry emblem"},
+  "Children's Service":{src:"https://static.wixstatic.com/media/8d370a_1154dcfd27854c85b68946c94d41426b~mv2.png/v1/fill/w_640%2Ch_586%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/shutterstock_1898354080.png",label:"CS",alt:"Presbyterian Children’s Service ministry emblem"},
   "Junior Youth (JY)":{src:"https://osueben-ezer.com/assets/img/JYlogo.png",label:"JY",alt:"Presbyterian Junior Youth emblem"},
   "Young People's Guild (YPG)":{src:"https://pbs.twimg.com/media/Fa1QL4VWYAMGo0J.jpg",label:"YPG",alt:"Young People's Guild ministry emblem"},
   "Young Adults' Fellowship (YAF)":{src:"https://osueben-ezer.com/assets/img/YAFogo.png",label:"YAF",alt:"Young Adults' Fellowship ministry emblem"},
   "Women's Fellowship":{src:"https://clipground.com/images/presbyterian-church-of-ghana-logo-clipart-1.png",label:"WF",alt:"Women's Fellowship ministry emblem"},
-  "YES":{src:"https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png",label:"YES",alt:"YES ministry emblem"},
-  "Women’s Leadership":{src:"https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png",label:"WL",alt:"Women's Leadership ministry emblem"},
+  "YES":{label:"YES",alt:"YES ministry mark"},
+  "Women’s Leadership":{label:"WL",alt:"Women’s Leadership ministry mark"},
   "Men's Fellowship":{src:"https://cdn.modernghana.com/content__/640/457/uyp0sgf66m_presby_church_logo.jpg",label:"MF",alt:"Men's Fellowship ministry emblem"},
   "Bible & Prayer Group":{src:"https://osueben-ezer.com/assets/img/BSPG.png",label:"BPG",alt:"Bible and Prayer Group ministry emblem"},
   "Singing Band & Choir":{src:"https://www.pngitem.com/pimgs/m/518-5181372_presbyterian-church-ghana-singing-band-logo-hd-png.png",label:"SB",alt:"Singing Band and Choir ministry emblem"},
-  "Other ministries":{src:"https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png",label:"OM",alt:"Other church ministries emblem"}
+  "Other ministries":{label:"OM",alt:"Other church ministries mark"}
 };
 const data:Record<string,{title:string;intro:string;cards:{icon:string;title:string;text:string;href:string}[]}>={
 about:{title:"About the District",intro:"A shared home for worship, discipleship, fellowship and service throughout the Peace Congregation.",cards:[{icon:"purpose",title:"Our Purpose",text:"Help congregations communicate clearly, welcome visitors and keep members informed.",href:"/ministries"},{icon:"values",title:"Our Values",text:"Worship rooted in Scripture, discipleship for every generation, service and unity.",href:"/ministries"}]},
@@ -31,17 +31,19 @@ contact:{title:"Contact the District",intro:"Ask a question, enquire about a con
 };
 function localMinistryLogo(name:string):string {
   const n=name.toLowerCase();
-  if(n.includes("children")) return "https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png";
+  // Use group-specific artwork where a suitable ministry logo is available.
+  // Do not substitute the general Presbyterian Church crest for a ministry logo.
+  if(n.includes("children")) return "https://static.wixstatic.com/media/8d370a_1154dcfd27854c85b68946c94d41426b~mv2.png/v1/fill/w_640%2Ch_586%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/shutterstock_1898354080.png";
   if(n.includes("junior")||n==="jy") return "https://osueben-ezer.com/assets/img/JYlogo.png";
   if(n.includes("guild")||n==="ypg") return "https://pbs.twimg.com/media/Fa1QL4VWYAMGo0J.jpg";
   if(n.includes("young adults")||n==="yaf") return "https://osueben-ezer.com/assets/img/YAFogo.png";
-  if(n.includes("women")&&n.includes("leadership")) return "https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png";
+  if(n.includes("women")&&n.includes("leadership")) return "";
   if(n.includes("women")) return "https://clipground.com/images/presbyterian-church-of-ghana-logo-clipart-1.png";
   if(n.includes("men")) return "https://cdn.modernghana.com/content__/640/457/uyp0sgf66m_presby_church_logo.jpg";
-  if(n.includes("yes")) return "https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png";
+  if(n==="yes"||n.startsWith("yes ")) return "";
   if(n.includes("bible")||n.includes("prayer")) return "https://osueben-ezer.com/assets/img/BSPG.png";
   if(n.includes("singing")||n.includes("choir")||n.includes("band")) return "https://www.pngitem.com/pimgs/m/518-5181372_presbyterian-church-ghana-singing-band-logo-hd-png.png";
-  return "https://www.nicepng.com/png/detail/219-2193162_presbyterian-church-of-ghana-logo-presbyterian-church-ghana.png";
+  return "";
 }
 function PurposeValueIcon({type}:{type:string}){if(type==="purpose")return <svg viewBox="0 0 64 64" width="38" height="38" fill="none" aria-hidden="true"><path d="M32 5v17M24 13h16" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/><path d="M13 25c7-4 13-3 19 2 6-5 12-6 19-2v25c-7-4-13-3-19 2-6-5-12-6-19-2V25Z" stroke="currentColor" strokeWidth="3.5" strokeLinejoin="round"/><path d="M32 27v25" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>;if(type==="values")return <svg viewBox="0 0 64 64" width="38" height="38" fill="none" aria-hidden="true"><path d="M32 5 52 13v15c0 13-8 23-20 30C20 51 12 41 12 28V13L32 5Z" stroke="currentColor" strokeWidth="3.5" strokeLinejoin="round"/><path d="m21 31 7 7 15-16" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/></svg>;return <span>{type}</span>}
 function Card({icon,title,text,href}:{icon:string;title:string;text:string;href:string}){const logo=title in ministryLogos?ministryLogos[title]:null;return <article className={`card${logo?" ministry-card":""}`}>{logo?<div className="ministry-logo-wrap" data-label={logo.label}>{<MinistryLogo src={logo.src} label={logo.label} alt={logo.alt}/>}</div>:<div className="card-icon">{icon==="purpose"||icon==="values"?<PurposeValueIcon type={icon}/>:icon}</div>}<h3>{title}</h3><p>{text}</p><a className="text-link" href={href}>{href.startsWith("http")?"Open resource ↗":"Learn more →"}</a></article>}
