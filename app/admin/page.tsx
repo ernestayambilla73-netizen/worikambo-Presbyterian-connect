@@ -59,7 +59,7 @@ export default function AdminDashboard() {
   setBusy(true); setError("");
   const results = await Promise.all(modules.map(async m => {
    let query = supabase.from(m.table).select("*").order(m.table === "church_page_content" ? "slug" : "created_at", {ascending:false});
-   if (m.table === "church_gallery") query = query.eq("album", m.album);
+   if (m.table === "church_gallery") query = m.album === "Homepage Slideshow" ? query.eq("album", "Homepage Slideshow") : query.neq("album", "Homepage Slideshow");
    const {data,error} = await query.limit(200);
    return {table:m.table + ":" + m.album,count:data?.length ?? 0,error};
   }));
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
   results.forEach(r => { nextCounts[r.table] = r.count; });
   setCounts(nextCounts);
   let query = supabase.from(module.table).select("*").order(module.table === "church_page_content" ? "slug" : "created_at", {ascending:false});
-  if (module.table === "church_gallery") query = query.eq("album", module.album);
+  if (module.table === "church_gallery") query = module.album === "Homepage Slideshow" ? query.eq("album", "Homepage Slideshow") : query.neq("album", "Homepage Slideshow");
   const {data,error} = await query.limit(200);
   if (error) setError(error.message); else setRows(data ?? []);
   setBusy(false);
@@ -150,7 +150,19 @@ export default function AdminDashboard() {
   if (!window.confirm("Delete this record? This cannot be undone.")) return;
   setBusy(true); setError(""); setNotice("");
   const {error} = await supabase.from(module.table).delete().eq(module.key,row[module.key]);
-  if (error) setError(error.message); else { setNotice("Record deleted."); await load(); }
+  if (error) setError(error.message); else {
+   if (module.table === "church_gallery" && row.image_url) {
+    const marker = "/object/public/church-gallery/";
+    const position = String(row.image_url).indexOf(marker);
+    if (position >= 0) {
+     const objectPath = decodeURIComponent(String(row.image_url).slice(position + marker.length));
+     const {error:storageError} = await supabase.storage.from("church-gallery").remove([objectPath]);
+     if (storageError) setNotice("Gallery record deleted. The stored image file could not be removed automatically; ask the project owner to check storage.");
+     else setNotice("Photo and database record deleted.");
+    } else setNotice("Record deleted.");
+   } else setNotice("Record deleted.");
+   await load();
+  }
   setBusy(false);
  }
 
@@ -165,7 +177,7 @@ export default function AdminDashboard() {
    <a className="admin-summary-card" href="/admin/members"><strong>↗</strong><span>Member registration &amp; death records</span></a>
   </div>
   <div className="admin-workspace"><aside className="admin-sidebar"><h2>Manage website</h2><a href="/admin/members">Member register, death records &amp; groups ↗</a>{modules.map((m,i)=><button key={m.table} className={active===i?"active":""} onClick={()=>{setActive(i);setEditing(false);setNotice("");setError("");}}>{m.label}{m.private && <small>Private</small>}</button>)}<a href="/" target="_blank" rel="noreferrer">View public website ↗</a></aside>
-   <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? "Upload and publish church photos here. Published photos automatically appear in the homepage hero slideshow and public Gallery; add seven or more photos for a longer sequence." : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
+   <section className="admin-content"><div className="admin-content-head"><div><span className="eyebrow">CONTENT MANAGEMENT</span><h2>{module.label}</h2><p>{module.table==="church_posts" ? "Publish a news item by ticking “Publish publicly”. Published news appears on the public News page." : module.table==="church_gallery" ? (module.album === "Homepage Slideshow" ? "Upload slide images separately here. New images stay as drafts until you preview and approve them. Only approved slides appear in the homepage carousel." : "Review all church-gallery photos here. New uploads remain drafts until you inspect each preview and approve publication. Homepage slideshow items are managed separately.") : module.private ? "Private administrator-only records." : "Create, edit, publish and remove information shown on the website."}</p></div><button className="btn" onClick={startNew}>+ Add new</button></div>
     {notice && <p className="admin-success" role="status">{notice}</p>}{error && <p className="admin-error" role="alert">{error}</p>}
     {module.table === "church_gallery" && <section className="admin-editor bulk-photo-upload">
       <div className="admin-editor-head"><div><h3>Quick photo upload</h3><p className="admin-muted">Select several pictures at once. No need to fill in each photo's details.</p></div></div>
