@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import InstallApp from "./components/InstallApp";
+import WelcomeNotification from "./components/WelcomeNotification";
 import QuickAccess from "../components/QuickAccess";
 import Icon from "../components/Icon";
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     </div></header>
     {children}
     <InstallApp />
+    <WelcomeNotification />
     <footer className="site-footer">
       <div className="footer-glow" aria-hidden="true" />
       <div className="container footer-content">
