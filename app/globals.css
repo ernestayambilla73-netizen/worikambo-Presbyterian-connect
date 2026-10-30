@@ -686,3 +686,11 @@ button{transition:background-color .18s ease,border-color .18s ease,box-shadow .
  .admin-shell .admin-sidebar .admin-nav-heading{margin-top:12px}
  .admin-shell .admin-content-head>.btn{width:100%}
 }
+
+.system-state-page{min-height:58vh;display:grid;place-items:center;padding:54px 18px;background:linear-gradient(180deg,#f5f8fc,#fff)}
+.system-state-card{width:min(100%,590px);padding:clamp(26px,5vw,44px);background:#fff;border:1px solid #e0e7f0;border-radius:20px;box-shadow:0 16px 44px rgba(16,43,84,.08);text-align:center}
+.system-state-card h1{margin:18px auto 12px;font-size:clamp(28px,5vw,40px);line-height:1.15;letter-spacing:-1.2px;color:#102b54}
+.system-state-card p{max-width:460px;margin:0 auto 24px;color:#5d6b7e;line-height:1.8;font-size:14px}
+.system-state-icon{width:64px;height:64px;margin:22px auto 12px;display:grid;place-items:center;border-radius:18px;background:#edf3fa;color:#174b91}
+.system-state-card .btn{min-height:46px}
+.system-state-home{display:block;margin-top:16px;color:#174b91;font-size:13px;font-weight:750}
