@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function WhatsAppContactForm({ phone }: { phone: string }) {
   const [status, setStatus] = useState("");
-  const digits = phone.replace(/\\D/g, "");
+  const digits = phone.replace(/\D/g, "");
   const whatsappNumber = digits.startsWith("0") ? "233" + digits.slice(1) : digits;
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -20,7 +20,7 @@ export default function WhatsAppContactForm({ phone }: { phone: string }) {
       "Contact: " + String(form.get("contact") || ""),
       "Topic: " + String(form.get("topic") || "General enquiry"),
       "Message: " + String(form.get("message") || ""),
-    ].join("\\n");
+    ].join("\n");
     const url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
     window.open(url, "_blank", "noopener,noreferrer");
     setStatus("WhatsApp has opened with your message. Review it and tap Send to contact the church.");
