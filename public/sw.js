@@ -30,7 +30,7 @@ self.addEventListener("fetch", (event) => {
       try {
         const response = await fetch(request);
         const cacheControl = response.headers.get("Cache-Control") || "";
-        if (response.ok && !response.headers.has("Set-Cookie") && !/private|no-store/i.test(cacheControl)) {
+        if (response.ok && !response.headers.has("Set-Cookie")) {
           await cache.put(new Request(url.origin + url.pathname), response.clone());
         }
         return response;
