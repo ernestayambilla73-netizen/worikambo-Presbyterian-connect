@@ -65,8 +65,8 @@ export default function VisitorFollowUpPage(){
  };
  const remove=async(r:Visitor)=>{
   if(!window.confirm("Delete this visitor record permanently?"))return;
-  setBusy(true);const {error}=await supabase.from("pcms_visitors").delete().eq("id",r.id);
-  if(error)setError(error.message);else{setNotice("Visitor record deleted.");await load();}setBusy(false);
+  setBusy(true);const {data:deleted,error}=await supabase.from("pcms_visitors").delete().eq("id",r.id).select("id").maybeSingle();
+  if(error)setError("Delete failed: "+error.message);else if(!deleted)setError("No visitor record was deleted. Refresh the register and verify administrator permissions.");else{setNotice("Visitor record deleted.");await load();}setBusy(false);
  };
  const convertToMember=async(r:Visitor)=>{
   const parts=r.full_name.trim().split(/\s+/);
