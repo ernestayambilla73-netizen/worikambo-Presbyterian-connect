@@ -122,8 +122,8 @@ export default function MemberRegisterPage() {
  };
  const deleteMember = async (m:Member) => {
   if (!window.confirm(`Delete the record for ${m.first_name} ${m.last_name}? This cannot be undone.`)) return;
-  setBusy(true); const {error:e} = await supabase.from("church_members").delete().eq("id",m.id);
-  if (e) setError(e.message); else {setNotice("Member record deleted."); await load();}
+  setBusy(true); const {data:deleted,error:e} = await supabase.from("church_members").delete().eq("id",m.id).select("id").maybeSingle();
+  if (e) setError("Delete failed: "+e.message); else if(!deleted) setError("No member record was deleted. Refresh the register and verify that your administrator account still has permission."); else {setNotice("Member record deleted."); await load();}
   setBusy(false);
  };
  const startGroup = (g?:Group) => {
