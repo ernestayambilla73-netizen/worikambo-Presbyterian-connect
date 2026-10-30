@@ -459,3 +459,5 @@ h1 span{color:#0868cf}
 @media(prefers-reduced-motion:reduce){
   .homepage-slideshow-wrap .hero-slide-image img{animation:none}
 }
+
+.admin-nav-heading{display:block;margin:18px 8px 6px;padding-top:12px;border-top:1px solid #ffffff2b;color:#d9e5ff;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}.admin-sidebar .admin-nav-heading:first-of-type{margin-top:8px;border-top:0;padding-top:0}.admin-sidebar button{display:block;width:100%;text-align:left;background:transparent;border:0;color:#edf2ff;padding:11px 12px;font-size:12px;border-radius:9px;cursor:pointer}.admin-sidebar button:hover,.admin-sidebar button.active{background:#ffffff20}.admin-sidebar .admin-public-links{margin-top:8px}
