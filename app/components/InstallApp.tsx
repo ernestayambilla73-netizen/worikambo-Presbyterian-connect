@@ -19,7 +19,12 @@ export default function InstallApp() {
       });
     }
     const media = window.matchMedia("(display-mode: standalone)");
-    if (media.matches || (navigator as Navigator & { standalone?: boolean }).standalone) setInstalled(true);
+    let previouslyInstalled = false;
+    try { previouslyInstalled = window.localStorage.getItem("peace-congregation-app-installed") === "true"; } catch {}
+    if (previouslyInstalled || media.matches || (navigator as Navigator & { standalone?: boolean }).standalone) {
+      setInstalled(true);
+      try { window.localStorage.setItem("peace-congregation-app-installed", "true"); } catch {}
+    }
     const onPrompt = (event: Event) => {
       event.preventDefault();
       setInstallEvent(event as InstallPromptEvent);
@@ -27,6 +32,7 @@ export default function InstallApp() {
     const onInstalled = () => {
       setInstalled(true);
       setInstallEvent(null);
+      try { window.localStorage.setItem("peace-congregation-app-installed", "true"); } catch {}
       setMessage("App installed successfully.");
     };
     window.addEventListener("beforeinstallprompt", onPrompt);
@@ -47,7 +53,10 @@ export default function InstallApp() {
       const choice = await installEvent.userChoice;
       setInstallEvent(null);
       setMessage(choice.outcome === "accepted" ? "Thanks — follow the browser prompts to finish installing." : "Installation was cancelled. You can try again any time.");
-      if (choice.outcome === "accepted") setInstalled(true);
+      if (choice.outcome === "accepted") {
+        setInstalled(true);
+        try { window.localStorage.setItem("peace-congregation-app-installed", "true"); } catch {}
+      }
       return;
     }
     setMessage("On Android, open your browser menu (⋮) and choose “Install app” or “Add to Home screen”. If that option is missing, open this site in Chrome and try again after the page finishes loading.");
