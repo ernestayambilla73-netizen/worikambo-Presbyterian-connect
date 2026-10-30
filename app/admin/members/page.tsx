@@ -94,7 +94,7 @@ export default function MemberRegisterPage() {
  };
  const newMember = () => {
   const next = emptyMember();
-  next.member_number = `WPC-${new Date().getFullYear()}-${String(members.length+1).padStart(4,"0")}`;
+  next.member_number = `WPC-${new Date().getFullYear()}-${crypto.randomUUID().slice(0,8).toUpperCase()}`;
   setDraft(next); setEditingMember(true); setNotice(""); setError("");
  };
  const editMember = (m:Member) => { setDraft({...m,date_of_birth:m.date_of_birth ?? ""}); setEditingMember(true); setNotice(""); setError(""); };
@@ -150,7 +150,7 @@ export default function MemberRegisterPage() {
   const quote=(v:any)=>`"${String(v??"").replace(/"/g,'""')}"`;
   const lines=[headers,...filtered.map(m=>[m.member_number,m.first_name,m.middle_name,m.last_name,m.date_of_birth,ageOf(m.date_of_birth),m.gender,m.phone,m.email,m.address,m.congregation,m.occupation,m.marital_status,m.baptism_status,m.confirmation_status,groupName(m.member_group_id),m.member_status,m.emergency_contact_name,m.emergency_contact_phone])].map(row=>row.map(quote).join(",")).join("\r\n");
   const blob=new Blob(["\uFEFF"+lines],{type:"text/csv;charset=utf-8;"});
-  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="peace-sumalism-member-register.csv";a.click();URL.revokeObjectURL(url);
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="peace-sumalism-member-register.csv";a.click();window.setTimeout(() => URL.revokeObjectURL(url), 1500);
  };
 
  if (checking) return <main className="admin-shell"><div className="container"><div className="member-panel">Checking administrator access…</div></div></main>;
