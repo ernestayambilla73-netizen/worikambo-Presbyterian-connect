@@ -15,7 +15,7 @@ const csvDownload = (name:string, rows:any[]) => {
   const body = [headers.map(quote).join(","), ...rows.map(r=>headers.map(h=>quote(r[h])).join(","))].join("\r\n");
   const blob = new Blob(["\\uFEFF"+body],{type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob); const a = document.createElement("a");
-  a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+  a.href=url; a.download=name; a.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1500);
 };
 
 export default function QuickDeskPage() {
