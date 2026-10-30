@@ -1,0 +1,62 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { createClient } from "../../../lib/supabase/client";
+
+type Module = { key:string; label:string; table:string; description:string; fields:{key:string;label:string;type?:string;required?:boolean}[]; adminOnly?:boolean };
+const modules:Module[] = [
+ {key:"events",label:"Events & programmes",table:"pcms_events",description:"Plan church services, meetings, conventions and programmes.",fields:[{key:"title",label:"Event title",required:true},{key:"description",label:"Description",type:"textarea"},{key:"event_date",label:"Date and time",type:"datetime-local"},{key:"venue",label:"Venue"},{key:"status",label:"Status"}]},
+ {key:"attendance",label:"Attendance",table:"pcms_attendance",description:"Record attendance for services and church programmes.",fields:[{key:"attendee_name",label:"Attendee name",required:true},{key:"attendance_date",label:"Date",type:"date"},{key:"attendance_type",label:"Service / meeting type",required:true},{key:"notes",label:"Notes",type:"textarea"}]},
+ {key:"prayer",label:"Prayer requests",table:"pcms_prayer_requests",description:"Confidential requests and follow-up. Only administrators can access these records.",adminOnly:true,fields:[{key:"requester_name",label:"Requester name"},{key:"contact",label:"Contact"},{key:"request_text",label:"Prayer request",type:"textarea",required:true},{key:"privacy",label:"Privacy (private / share with prayer team)"},{key:"status",label:"Status"},{key:"assigned_to",label:"Assigned prayer leader"},{key:"follow_up_notes",label:"Follow-up notes",type:"textarea"}]},
+ {key:"pastoral",label:"Pastoral care",table:"pcms_pastoral_care",description:"Record visits and pastoral follow-up. Restricted to administrators.",adminOnly:true,fields:[{key:"person_name",label:"Person's name",required:true},{key:"care_type",label:"Care type"},{key:"summary",label:"Private summary",type:"textarea",required:true},{key:"follow_up_date",label:"Follow-up date",type:"date"},{key:"status",label:"Status"},{key:"assigned_to",label:"Assigned officer"}]},
+ {key:"finance",label:"Finance & donations",table:"pcms_finance",description:"Private income and expenditure register. Admin-role access only.",adminOnly:true,fields:[{key:"entry_date",label:"Transaction date",type:"date"},{key:"entry_type",label:"Income / expense",required:true},{key:"category",label:"Category"},{key:"description",label:"Description",type:"textarea"},{key:"amount",label:"Amount (GHS)",type:"number",required:true},{key:"payment_method",label:"Payment method"},{key:"reference_code",label:"Reference"}]},
+ {key:"visitors",label:"Visitor follow-up",table:"pcms_visitors",description:"Welcome visitors and coordinate follow-up.",fields:[{key:"full_name",label:"Visitor name",required:true},{key:"phone",label:"Phone"},{key:"visit_date",label:"Visit date",type:"date"},{key:"follow_up_status",label:"Follow-up status"},{key:"assigned_to",label:"Assigned member"},{key:"notes",label:"Notes",type:"textarea"}]},
+ {key:"volunteers",label:"Volunteers & teams",table:"pcms_volunteers",description:"Coordinate ushers, choir, readers and other service teams.",fields:[{key:"full_name",label:"Volunteer name",required:true},{key:"phone",label:"Phone"},{key:"team",label:"Team / ministry",required:true},{key:"availability",label:"Availability"},{key:"status",label:"Status"},{key:"notes",label:"Notes",type:"textarea"}]},
+ {key:"records",label:"Baptism & marriage records",table:"pcms_records",description:"Restricted church register for certificates and official records.",adminOnly:true,fields:[{key:"record_type",label:"Record type",required:true},{key:"person_name",label:"Person / couple name",required:true},{key:"record_date",label:"Date",type:"date"},{key:"reference_number",label:"Certificate / reference number"},{key:"details",label:"Details",type:"textarea"}]},
+ {key:"documents",label:"Documents & reports",table:"pcms_documents",description:"Index meeting minutes, policies, reports and church documents.",fields:[{key:"title",label:"Document title",required:true},{key:"document_type",label:"Type"},{key:"file_url",label:"File link (private storage link)"},{key:"description",label:"Description",type:"textarea"},{key:"access_level",label:"Access level"}]},
+ {key:"equipment",label:"Equipment & property",table:"pcms_equipment",description:"Track church instruments, furniture and equipment.",fields:[{key:"item_name",label:"Item",required:true},{key:"category",label:"Category"},{key:"quantity",label:"Quantity",type:"number"},{key:"condition",label:"Condition"},{key:"location",label:"Location"},{key:"notes",label:"Notes",type:"textarea"}]},
+ {key:"reminders",label:"Reminders & tasks",table:"pcms_reminders",description:"Track follow-ups, birthdays, anniversaries and important dates.",fields:[{key:"title",label:"Reminder",required:true},{key:"due_at",label:"Due date and time",type:"datetime-local"},{key:"reminder_type",label:"Type"},{key:"assigned_to",label:"Assigned to"},{key:"status",label:"Status"},{key:"notes",label:"Notes",type:"textarea"}]},
+ {key:"communications",label:"Communication centre",table:"pcms_communications",description:"Prepare announcements for the website or selected congregation groups. Sending integrations are not activated.",fields:[{key:"title",label:"Announcement title",required:true},{key:"message",label:"Message",type:"textarea",required:true},{key:"audience",label:"Audience"},{key:"channel",label:"Channel"},{key:"status",label:"Draft / approved"},{key:"scheduled_for",label:"Schedule for",type:"datetime-local"}]}
+];
+const empty = (m:Module) => Object.fromEntries(m.fields.map(f=>[f.key,""]));
+const dateValue = (value:string,type?:string) => type==="datetime-local" && value ? new Date(value).toISOString() : value || null;
+
+export default function ManagementPage(){
+ const supabase=useMemo(()=>createClient(),[]);
+ const [authorized,setAuthorized]=useState(false),[admin,setAdmin]=useState(false),[checking,setChecking]=useState(true);
+ const [active,setActive]=useState("events"),[rows,setRows]=useState<any[]>([]),[draft,setDraft]=useState<any>({}),[editing,setEditing]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState("");
+ const [counts,setCounts]=useState<Record<string,number>>({});
+ const module=modules.find(m=>m.key===active)!;
+ const load=useCallback(async()=>{
+  if(!authorized)return;
+  setBusy(true);setError("");
+  const [current,...all]=await Promise.all([supabase.from(module.table).select("*").order("created_at",{ascending:false}).limit(150),...modules.filter(m=>!m.adminOnly||admin).map(m=>supabase.from(m.table).select("id",{count:"exact",head:true}))]);
+  if(current.error)setError(current.error.message);else setRows(current.data??[]);
+  const visible=modules.filter(m=>!m.adminOnly||admin);const next:Record<string,number>={};
+  all.forEach((r:any,i:number)=>{next[visible[i].key]=r.count??0;});setCounts(next);setBusy(false);
+ },[authorized,admin,module,supabase]);
+ useEffect(()=>{let live=true;(async()=>{const {data:{session}}=await supabase.auth.getSession();if(!session){if(live)setChecking(false);return;}const {data,error}=await supabase.from("church_admins").select("role").eq("user_id",session.user.id).maybeSingle();if(live){setAuthorized(!error&&!!data);setAdmin(data?.role==="admin");setChecking(false);if(error)setError(error.message);}})();return()=>{live=false};},[supabase]);
+ useEffect(()=>{void load()},[load]);
+ const startNew=()=>{setDraft(empty(module));setEditing(true);setNotice("");setError("");};
+ const save=async(e:React.FormEvent)=>{e.preventDefault();setBusy(true);setError("");const payload:any={...draft,created_by:(await supabase.auth.getUser()).data.user?.id};delete payload.id;
+  for(const f of module.fields)payload[f.key]=dateValue(String(payload[f.key]??""),f.type);
+  const {error:e2}=draft.id?await supabase.from(module.table).update(payload).eq("id",draft.id):await supabase.from(module.table).insert(payload);
+  if(e2)setError(e2.message);else{setNotice("Record saved.");setEditing(false);await load();}setBusy(false);
+ };
+ const edit=(row:any)=>{const copy={...row};for(const f of module.fields)if(f.type==="datetime-local"&&copy[f.key])copy[f.key]=new Date(copy[f.key]).toISOString().slice(0,16);setDraft(copy);setEditing(true);setError("");};
+ const remove=async(row:any)=>{if(!window.confirm("Delete this record permanently?"))return;const {error:e}=await supabase.from(module.table).delete().eq("id",row.id);if(e)setError(e.message);else{setNotice("Record deleted.");await load();}};
+ if(checking)return <main className="admin-shell"><div className="container"><section className="member-panel">Checking administrator access…</section></div></main>;
+ if(!authorized)return <main className="admin-shell"><div className="container"><section className="member-panel"><h1>Church management</h1><p>Sign in with an approved church administrator account.</p><a className="btn" href="/admin">Go to admin sign in</a></section></div></main>;
+ const visible=modules.filter(m=>!m.adminOnly||admin);
+ return <main className="admin-shell"><div className="container admin-container">
+  <div className="member-top"><div><span className="eyebrow">PRESBYTERIAN CHURCH MANAGEMENT SYSTEM</span><h1>Church management</h1><p>Operational records for Peace Congregation. Sensitive modules are restricted to admin-role accounts.</p></div><div className="member-top-actions"><a className="btn btn-secondary" href="/admin">Website admin</a><a className="btn btn-secondary" href="/">View website</a></div></div>
+  <div className="member-stats"><div><strong>{Object.values(counts).reduce((a,b)=>a+b,0)}</strong><span>Operational records</span></div><div><strong>{counts.events??0}</strong><span>Events</span></div><div><strong>{counts.attendance??0}</strong><span>Attendance entries</span></div><div><strong>{counts.visitors??0}</strong><span>Visitor records</span></div></div>
+  <div className="member-panel"><div className="member-tabs">{visible.map(m=><button key={m.key} className={active===m.key?"active":""} onClick={()=>{setActive(m.key);setEditing(false);setNotice("");setError("");}}>{m.label}</button>)}</div>
+   <div className="member-toolbar"><div><h2>{module.label}</h2><p>{module.description}</p></div><button className="btn" onClick={startNew}>+ Add record</button></div>
+   {notice&&<p className="admin-success" role="status">{notice}</p>}{error&&<p className="admin-error" role="alert">{error}</p>}
+   {editing&&<form className="member-editor" onSubmit={save}><div className="member-editor-heading"><h2>{draft.id?"Edit record":"New record"}</h2><button type="button" className="admin-close" onClick={()=>setEditing(false)}>Close</button></div><div className="member-form-grid">{module.fields.map(f=><label key={f.key} className={f.type==="textarea"?"member-wide":""}>{f.label}{f.type==="textarea"?<textarea className="member-input" value={draft[f.key]??""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/>:<input className="member-input" type={f.type??"text"} value={draft[f.key]??""} onChange={e=>setDraft({...draft,[f.key]:e.target.value})} required={f.required}/>}</label>)}</div><div className="member-editor-actions"><button className="btn" disabled={busy}>{busy?"Saving…":"Save record"}</button><button type="button" className="btn btn-secondary" onClick={()=>setEditing(false)}>Cancel</button></div></form>}
+   <div className="member-table-wrap"><table className="data-table"><thead><tr>{module.fields.slice(0,5).map(f=><th key={f.key}>{f.label}</th>)}<th>Actions</th></tr></thead><tbody>{rows.map(row=><tr key={row.id}>{module.fields.slice(0,5).map(f=><td key={f.key}>{String(row[f.key]??"—").slice(0,100)}</td>)}<td><div className="admin-row-actions"><button onClick={()=>edit(row)}>Edit</button><button className="danger" onClick={()=>void remove(row)}>Delete</button></div></td></tr>)}{!rows.length&&<tr><td colSpan={6}>{busy?"Loading…":"No records yet."}</td></tr>}</tbody></table></div>
+  </div>
+  <p className="admin-footnote">Privacy: prayer requests, pastoral care and finance are not public. This screen does not send WhatsApp, email or SMS messages. Add approved integrations before activating external delivery.</p>
+ </div></main>;
+}
