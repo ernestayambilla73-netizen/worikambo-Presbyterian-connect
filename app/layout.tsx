@@ -36,6 +36,7 @@ const nav = [
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en"><body>
+    <a className="skip-link" href="#main-content">Skip to main content</a>
     <div className="topline" />
     <header className="site-header"><div className="nav-wrap">
       <Brand />
@@ -45,7 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </nav>
       <QuickAccess />
     </div></header>
-    {children}
+    <div id="main-content">{children}</div>
     <InstallApp />
     <WelcomeNotification />
     <footer className="site-footer">
