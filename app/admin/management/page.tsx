@@ -44,7 +44,7 @@ export default function ManagementPage(){
   if(e2)setError(e2.message);else{setNotice("Record saved.");setEditing(false);await load();}setBusy(false);
  };
  const edit=(row:any)=>{const copy={...row};for(const f of module.fields)if(f.type==="datetime-local"&&copy[f.key])copy[f.key]=new Date(copy[f.key]).toISOString().slice(0,16);setDraft(copy);setEditing(true);setError("");};
- const remove=async(row:any)=>{if(!window.confirm("Delete this record permanently?"))return;const {error:e}=await supabase.from(module.table).delete().eq("id",row.id);if(e)setError(e.message);else{setNotice("Record deleted.");await load();}};
+ const remove=async(row:any)=>{if(!window.confirm("Delete this record permanently?"))return;setBusy(true);setError("");const {data:deleted,error:e}=await supabase.from(module.table).delete().eq("id",row.id).select("id").maybeSingle();if(e)setError("Delete failed: "+e.message);else if(!deleted)setError("No record was deleted. Refresh and verify that your administrator account has permission for this section.");else{setNotice("Record deleted successfully.");await load();}setBusy(false);};
  if(checking)return <main className="admin-shell"><div className="container"><section className="member-panel">Checking administrator access…</section></div></main>;
  if(!authorized)return <main className="admin-shell"><div className="container"><section className="member-panel"><h1>Church management</h1><p>Sign in with an approved church administrator account.</p><a className="btn" href="/admin">Go to admin sign in</a></section></div></main>;
  const visible=modules.filter(m=>!m.adminOnly||admin);
