@@ -627,3 +627,62 @@ button{transition:background-color .18s ease,border-color .18s ease,box-shadow .
 .gallery-download-status{font-size:11px;color:#536782}
 @media(max-width:640px){.gallery-download-button{min-height:44px}.gallery-download-wrap{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+
+
+/* Final administrator usability pass: predominantly white with restrained PCG blue */
+.admin-shell .admin-sidebar{
+ background:#fff!important;color:#19365b!important;border:1px solid #dfe6ef!important;
+ box-shadow:0 8px 24px rgba(16,43,84,.045)!important
+}
+.admin-shell .admin-sidebar h2{color:#102b54!important;border-bottom:1px solid #e8edf4!important}
+.admin-shell .admin-sidebar .admin-nav-heading{color:#8d1f35!important;border-color:#e6ebf2!important}
+.admin-shell .admin-sidebar a,.admin-shell .admin-sidebar button{
+ color:#344861!important;background:#fff!important;border:1px solid transparent!important;
+ min-height:42px;font-weight:650
+}
+.admin-shell .admin-sidebar a:hover,.admin-shell .admin-sidebar button:hover{
+ color:#123d75!important;background:#f5f8fc!important;border-color:#e2e9f2!important
+}
+.admin-shell .admin-sidebar button.active{
+ color:#123d75!important;background:#edf3fa!important;border-color:#d7e4f4!important;
+ border-left:3px solid #174b91!important;font-weight:800!important;box-shadow:none!important
+}
+.admin-shell .admin-sidebar button.active small{color:#536782!important}
+.admin-shell .admin-sidebar .admin-public-links a{background:#f8fafd!important;border:1px solid #e7edf5!important;color:#344861!important}
+.admin-shell .admin-sidebar .admin-public-links a:hover{background:#edf3fa!important;color:#123d75!important}
+.admin-shell .btn:not(.btn-secondary),.admin-shell button.btn:not(.btn-secondary){
+ color:#174b91!important;background:#fff!important;border:1px solid #b9cbe1!important;
+ box-shadow:none!important
+}
+.admin-shell .btn:not(.btn-secondary):hover,.admin-shell button.btn:not(.btn-secondary):hover{
+ color:#102b54!important;background:#edf3fa!important;border-color:#8eaccf!important
+}
+.admin-shell .btn-secondary,.admin-shell button.btn-secondary{
+ color:#344861!important;background:#fff!important;border:1px solid #d5dfeb!important
+}
+.admin-shell .admin-row-actions button{color:#174b91!important;background:#fff!important}
+.admin-shell .admin-row-actions button.danger{color:#9b2638!important;background:#fff8f8!important}
+.admin-shell .admin-summary-card{background:#fff!important;border:1px solid #e1e8f1!important}
+.admin-shell .admin-summary-card strong{color:#174b91!important}
+.admin-shell .member-tabs button,.admin-shell .member-group-actions button{
+ color:#344861!important;background:#fff!important;border:1px solid #e1e8f1!important
+}
+.admin-shell .member-tabs button.active{color:#174b91!important;background:#edf3fa!important;border-color:#cbd9eb!important}
+.admin-shell button:disabled{opacity:.58;cursor:not-allowed;transform:none!important}
+.admin-shell button:focus-visible,.admin-shell a:focus-visible,.admin-shell input:focus-visible,
+.admin-shell textarea:focus-visible,.admin-shell select:focus-visible{
+ outline:3px solid #c6a45b!important;outline-offset:3px!important
+}
+.skip-link{position:fixed;left:12px;top:10px;z-index:20000;transform:translateY(-160%);
+ background:#102b54;color:#fff;padding:12px 16px;border-radius:9px;font-weight:800}
+.skip-link:focus{transform:translateY(0);outline:3px solid #c6a45b;outline-offset:3px}
+@media(max-width:800px){
+ .admin-shell .admin-sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .admin-shell .admin-sidebar h2,.admin-shell .admin-sidebar .admin-nav-heading,
+ .admin-shell .admin-sidebar>a,.admin-shell .admin-sidebar .admin-public-links{grid-column:1/-1}
+}
+@media(max-width:520px){
+ .admin-shell .admin-sidebar{grid-template-columns:1fr}
+ .admin-shell .admin-sidebar .admin-nav-heading{margin-top:12px}
+ .admin-shell .admin-content-head>.btn{width:100%}
+}
