@@ -84,7 +84,7 @@ begin
   execute format('alter table public.%I enable row level security',t);
   execute format('drop policy if exists "pcms admin access" on public.%I',t);
   execute format('drop policy if exists "pcms finance admin only" on public.%I',t);
-  if t='pcms_finance' or t='pcms_pastoral_care' or t='pcms_prayer_requests' then
+  if t='pcms_finance' or t='pcms_pastoral_care' or t='pcms_prayer_requests' or t='pcms_records' then
    execute format('create policy "pcms finance admin only" on public.%I for all to authenticated using (exists (select 1 from public.church_admins a where a.user_id=auth.uid() and a.role=''admin'')) with check (exists (select 1 from public.church_admins a where a.user_id=auth.uid() and a.role=''admin''))',t);
   else
    execute format('create policy "pcms admin access" on public.%I for all to authenticated using (private.is_church_admin()) with check (private.is_church_admin())',t);
