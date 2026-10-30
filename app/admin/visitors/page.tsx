@@ -82,7 +82,7 @@ export default function VisitorFollowUpPage(){
   const quote=(v:any)=>'"'+String(v??"").replace(/"/g,'""')+'"';
   const data=[["Visitor","Phone","Visit date","First time","Follow-up","Assigned to","Notes"],...filtered.map(r=>[r.full_name,r.phone,r.visit_date,r.first_time?"Yes":"No",r.follow_up_status,r.assigned_to,r.notes])];
   const blob=new Blob(["\uFEFF"+data.map(row=>row.map(quote).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"});
-  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="peace-congregation-visitors.csv";a.click();URL.revokeObjectURL(url);
+  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="peace-congregation-visitors.csv";a.click();window.setTimeout(() => URL.revokeObjectURL(url), 1500);
  };
 
  if(checking)return <main className="admin-shell"><div className="container"><section className="member-panel">Checking administrator access…</section></div></main>;
