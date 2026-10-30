@@ -600,3 +600,30 @@ button{transition:background-color .18s ease,border-color .18s ease,box-shadow .
  .admin-footnote{font-size:11px;padding:13px}
 }
 @media(prefers-reduced-motion:reduce){button,a,.card{transition:none!important}}
+
+/* Accessible, restrained administrator palette: mostly white with clear blue actions */
+.admin-shell .admin-sidebar{background:#fff!important;color:#233650!important;border:1px solid #dce4ef!important;box-shadow:0 8px 24px rgba(16,43,84,.045)!important}
+.admin-shell .admin-sidebar h2{color:#102b54!important;border-bottom:1px solid #e5ebf3!important}
+.admin-shell .admin-sidebar .admin-nav-heading{color:#174b91!important;border-color:#e5ebf3!important}
+.admin-shell .admin-sidebar a,.admin-shell .admin-sidebar button{color:#33465f!important;background:transparent!important;border:1px solid transparent!important;min-height:42px;font-weight:650}
+.admin-shell .admin-sidebar a:hover,.admin-shell .admin-sidebar button:hover{color:#102b54!important;background:#f3f6fb!important;border-color:#e1e8f2!important}
+.admin-shell .admin-sidebar button.active{color:#123d75!important;background:#eaf1fa!important;border-color:#d7e4f4!important;border-left:3px solid #174b91!important;font-weight:800!important;box-shadow:none!important}
+.admin-shell .admin-sidebar button.active small{color:#536782!important}
+.admin-shell .admin-sidebar .admin-public-links a{background:#f8fafd!important;border-color:#e5ebf3!important;color:#33465f!important}
+.admin-shell .admin-sidebar .admin-public-links a:hover{background:#edf3fb!important}
+.admin-shell .btn:not(.btn-secondary),.admin-shell button.btn:not(.btn-secondary){color:#fff!important;background:#174b91!important;border-color:#174b91!important}
+.admin-shell .btn:not(.btn-secondary):hover,.admin-shell button.btn:not(.btn-secondary):hover{color:#fff!important;background:#102b54!important;border-color:#102b54!important}
+.admin-shell .btn-secondary{color:#174b91!important;background:#fff!important;border-color:#cbd8e8!important}
+.admin-shell .admin-row-actions button{color:#174b91!important;background:#fff!important}
+.admin-shell .admin-row-actions button.danger{color:#9b2638!important;background:#fff8f8!important}
+.admin-shell .admin-summary-card{color:#263b58!important;background:#fff!important}
+.admin-shell .admin-summary-card span{color:#263b58!important}
+.admin-shell .admin-summary-card strong{color:#174b91!important}
+.admin-shell :is(button,a,input,select,textarea):focus-visible{outline:3px solid #c6a45b!important;outline-offset:3px!important}
+.gallery-download-wrap{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+.gallery-download-button{min-height:40px;padding:9px 13px;border:1px solid #174b91;border-radius:9px;background:#fff;color:#174b91;font-size:12px;font-weight:800;cursor:pointer}
+.gallery-download-button:hover{background:#edf3fb}
+.gallery-download-button:disabled{opacity:.65;cursor:wait}
+.gallery-download-status{font-size:11px;color:#536782}
+@media(max-width:640px){.gallery-download-button{min-height:44px}.gallery-download-wrap{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
