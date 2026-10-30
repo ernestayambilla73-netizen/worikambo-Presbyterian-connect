@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createClient } from "../../../lib/supabase/client";
 
 const TABLES = [
@@ -16,43 +16,13 @@ export default function BackupPage() {
   const supabase = useMemo(() => createClient(), []);
   const [checking, setChecking] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [sessionEmail, setSessionEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
-  useMemo(() => {
-    // This memo is intentionally not used for side effects.
-    return null;
-  }, []);
-
-  import("react").then(({ useEffect }) => {
-    // no-op: the access check is handled by the component effect below
-  }).catch(() => {});
-
-  return <BackupAccessGate
-    supabase={supabase}
-    checking={checking}
-    setChecking={setChecking}
-    authorized={authorized}
-    setAuthorized={setAuthorized}
-    busy={busy}
-    setBusy={setBusy}
-    progress={progress}
-    setProgress={setProgress}
-    error={error}
-    setError={setError}
-    notice={notice}
-    setNotice={setNotice}
-  />;
-}
-
-function BackupAccessGate(props: any) {
-  const { supabase, checking, setChecking, authorized, setAuthorized, busy, setBusy, progress, setProgress, error, setError, notice, setNotice } = props;
-  const [sessionEmail, setSessionEmail] = useState("");
-
-  // Authentication and role are verified on the server-backed database, not by hiding the link.
-  requireReactEffect(() => {
+  useEffect(() => {
     let active = true;
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -66,7 +36,7 @@ function BackupAccessGate(props: any) {
       setChecking(false);
     })();
     return () => { active = false; };
-  }, [supabase, setChecking, setAuthorized, setError]);
+  }, [supabase]);
 
   async function exportBackup() {
     if (!window.confirm("This export contains confidential member, finance, pastoral-care and church records. Save it only in a secure location accessible to authorised church leaders. Continue?")) return;
@@ -131,10 +101,4 @@ function BackupAccessGate(props: any) {
     <p className="admin-footnote">This is a manual export, not an automatic scheduled backup or one-click restore. Keep copies in at least two secure locations and periodically test that the project owner can restore the database and retrieve stored media.</p>
     <p className="admin-footnote">Signed in as {sessionEmail || "approved administrator"}.</p>
   </div></main>;
-}
-
-// Keep the hook invocation in a dedicated wrapper to keep access checks unconditional.
-function requireReactEffect(effect: () => void | (() => void), deps: unknown[]) {
-  const React = require("react");
-  React.useEffect(effect, deps);
 }
