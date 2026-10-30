@@ -167,7 +167,27 @@ export default function AdminDashboard() {
   else if (module.table !== "church_congregations" && module.table !== "church_ministries") payload.created_by = session.id;
   const {error} = await supabase.from(module.table).upsert(payload, {onConflict:module.key});
   if (error) setError(error.message);
-  else { setNotice(payload.is_published ? "Saved and published successfully. The image is now visible on the public website and in this administrator list." : "Saved successfully as a draft. It is visible in this administrator list; tick the publish option and save again to show it publicly."); setEditing(false); setMediaFiles({}); await load(); }
+  else {
+   const isPublishedNews = module.table === "church_posts" && payload.post_type === "news" && payload.is_published === true;
+   if (isPublishedNews && typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
+    try {
+     const registration = await navigator.serviceWorker.ready;
+     const message = String(payload.body || "A new church news update is available.").replace(/\\s+/g," ").trim();
+     await registration.showNotification("PEACE (SUMALISM) CONGREGATION", {
+      body: `May the peace of the Lord be with you. ${String(payload.title || "New church news")}: ${message}`,
+      icon: "/api/pcg-crest", badge: "/api/pcg-crest",
+      tag: `church-news-${payload.id || Date.now()}`,
+      data: { url: "/news" }
+     });
+     setNotice("News published. A test notification has been sent to this device. Tap it to open the church news page.");
+    } catch {
+     setNotice("News published, but this device could not display the notification. Check browser notification permission.");
+    }
+   } else {
+    setNotice(payload.is_published ? "Saved and published successfully. The content is now visible on the public website." : "Saved successfully as a draft. Publish it to make it public.");
+   }
+   setEditing(false); setMediaFiles({}); await load();
+  }
   setBusy(false);
  }
  async function remove(row: Row) {
