@@ -1,5 +1,4 @@
 import { createClient } from "../lib/supabase/server";
-import QuickAccess from "../components/QuickAccess";
 import Icon from "../components/Icon";
 import HeroSlideshow from "./components/HeroSlideshow";
 const cards = [
