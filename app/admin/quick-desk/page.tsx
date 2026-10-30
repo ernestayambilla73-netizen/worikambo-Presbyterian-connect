@@ -66,7 +66,7 @@ export default function QuickDeskPage() {
     setSaving(true);setError("");setNotice("");
     const rows=selected.map(id=>{const m=members.find(x=>x.id===id)!;return {member_id:id,attendee_name:[m.first_name,m.middle_name,m.last_name].filter(Boolean).join(" "),attendance_date:date,attendance_type:service};});
     if(rows.length){
-      const {error:e}=await supabase.from("pcms_attendance").upsert(rows,{onConflict:"member_id,attendance_date,attendance_type",ignoreDuplicates:true});
+      const {error:e}=await supabase.from("pcms_attendance").upsert(rows,{onConflict:"member_id,attendance_date,attendance_type"});
       if(e){setError(e.message);setSaving(false);return;}
     }
     setNotice(`Attendance saved. ${rows.length} members marked present for ${service} on ${date}.`);
