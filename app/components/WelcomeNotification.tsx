@@ -40,21 +40,7 @@ export default function WelcomeNotification() {
           : "Notifications were not enabled. You can continue using the app.");
         return;
       }
-      const registration = "serviceWorker" in navigator
-        ? await navigator.serviceWorker.ready
-        : null;
-      if (registration) {
-        await registration.showNotification("PEACE (SUMALISM) CONGREGATION", {
-          body: GREETING,
-          icon: "/api/pcg-crest",
-          badge: "/api/pcg-crest",
-          tag: "peace-congregation-welcome",
-          data: { url: "/" },
-        });
-      } else {
-        new Notification("PEACE (SUMALISM) CONGREGATION", { body: GREETING, icon: "/api/pcg-crest" });
-      }
-      setStatus("Notifications enabled. You will receive church notifications when they are sent.");
+      setStatus("Notifications are enabled on this device. Publish a news item from the admin dashboard to test a notification on this device.");
     } catch {
       setStatus("We could not enable notifications on this device. Please check your browser settings.");
     }
