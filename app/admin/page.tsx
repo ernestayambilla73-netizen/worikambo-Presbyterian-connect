@@ -191,23 +191,42 @@ export default function AdminDashboard() {
   setBusy(false);
  }
  async function remove(row: Row) {
-  if (!window.confirm("Are you sure you want to delete this record? This cannot be undone.")) return;
+  const label = String(row.title || row.name || row.member_number || row[module.key] || "this record");
+  if (!window.confirm(`Delete "${label}"? This action cannot be undone.`)) return;
   setBusy(true); setError(""); setNotice("");
-  const {error} = await supabase.from(module.table).delete().eq(module.key,row[module.key]);
-  if (error) setError(error.message); else {
+  try {
+   const {data:deleted,error:deleteError} = await supabase
+    .from(module.table)
+    .delete()
+    .eq(module.key,row[module.key])
+    .select(module.key)
+    .maybeSingle();
+   if (deleteError) {
+    setError(`Delete failed: ${deleteError.message}`);
+    return;
+   }
+   if (!deleted) {
+    setError("Nothing was deleted. The record may already be removed, or your signed-in account is not being recognised as an authorised church administrator. Refresh and sign in again; if it continues, ask the project owner to check the admin account and row-level security.");
+    return;
+   }
+   let message = "Record deleted successfully.";
    if (module.table === "church_gallery" && row.image_url) {
     const marker = "/object/public/church-gallery/";
     const position = String(row.image_url).indexOf(marker);
     if (position >= 0) {
      const objectPath = decodeURIComponent(String(row.image_url).slice(position + marker.length));
      const {error:storageError} = await supabase.storage.from("church-gallery").remove([objectPath]);
-     if (storageError) setNotice("Gallery record deleted. The stored image file could not be removed automatically; ask the project owner to check storage.");
-     else setNotice("Photo and database record deleted.");
-    } else setNotice("Record deleted.");
-   } else setNotice("Record deleted.");
+     if (storageError) message = "The gallery record was deleted, but its stored image could not be removed: " + storageError.message;
+     else message = "Photo and database record deleted successfully.";
+    }
+   }
+   setNotice(message);
    await load();
+  } catch (e) {
+   setError("Delete failed unexpectedly. Please refresh and try again.");
+  } finally {
+   setBusy(false);
   }
-  setBusy(false);
  }
 
  if (checking) return <main className="admin-shell"><div className="container"><div className="admin-panel">Checking administrator session…</div></div></main>;
