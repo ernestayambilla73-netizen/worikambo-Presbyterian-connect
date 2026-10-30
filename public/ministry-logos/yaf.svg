@@ -1,1 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><rect width="240" height="240" rx="44" fill="#f0f2ff"/><circle cx="120" cy="108" r="82" fill="#4b53a5"/><circle cx="120" cy="108" r="72" fill="none" stroke="#d6d9ff" stroke-width="3"/><path d="M120 48v68M94 74h52" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M79 141q20-12 41 0 21-12 41 0v23q-21-10-41 5-21-15-41-5z" fill="#fff"/><text x="120" y="207" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="800" fill="#343b83">YAF</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" role="img" aria-labelledby="title desc">
+<title id="title">Presbyterian Church of Ghana Young Adults' Fellowship</title>
+<desc id="desc">Circular green Young Adults' Fellowship badge with a yellow shield, four crossed white-headed staffs, and the motto Christ in you the hope of glory.</desc>
+<defs>
+  <path id="topArc" d="M 65,248 A 185,185 0 0,1 435,248"/>
+  <path id="bottomArc" d="M 72,270 A 178,178 0 0,0 428,270"/>
+  <filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.1"/></filter>
+</defs>
+<circle cx="250" cy="250" r="238" fill="#fff"/>
+<circle cx="250" cy="250" r="211" fill="#00a65a" stroke="#171717" stroke-width="5"/>
+<circle cx="250" cy="250" r="222" fill="none" stroke="#fff" stroke-width="2"/>
+<text fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="800" letter-spacing="1.1"><textPath href="#topArc" startOffset="50%" text-anchor="middle">PRESBYTERIAN CHURCH OF GHANA</textPath></text>
+<text fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="800" letter-spacing="1.2"><textPath href="#bottomArc" startOffset="50%" text-anchor="middle">YOUNG ADULTS' FELLOWSHIP</textPath></text>
+<text x="250" y="128" text-anchor="middle" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="62" font-weight="900">YAF</text>
+<path d="M153 158 Q194 178 250 164 Q306 178 347 158 L347 299 Q347 342 250 399 Q153 342 153 299Z" fill="#ffdf19" stroke="#171717" stroke-width="8" stroke-linejoin="round"/>
+<path d="M163 168 Q205 185 250 173 Q295 185 337 168 L337 297 Q337 335 250 387 Q163 335 163 297Z" fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+<g stroke="#fff" stroke-width="15" stroke-linecap="round" fill="none">
+  <path d="M199 222 L301 322"/>
+  <path d="M301 222 L199 322"/>
+</g>
+<g fill="#fff" stroke="#171717" stroke-width="6">
+  <circle cx="190" cy="211" r="23"/><circle cx="310" cy="211" r="23"/>
+  <circle cx="190" cy="333" r="23"/><circle cx="310" cy="333" r="23"/>
+</g>
+<path d="M103 393 L148 383 L148 402 Q250 430 352 402 L352 383 L397 393 L375 414 L397 429 L352 439 Q250 465 148 439 L103 429 L125 414Z" fill="#fff" stroke="#171717" stroke-width="4" stroke-linejoin="round"/>
+<text x="250" y="425" text-anchor="middle" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="800" letter-spacing=".2">CHRIST IN YOU THE HOPE OF GLORY</text>
+<g fill="#111"><path d="M45 250l8-5 8 5-8 5z"/><path d="M439 250l8-5 8 5-8 5z"/></g>
+</svg>
