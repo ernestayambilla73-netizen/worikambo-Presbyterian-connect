@@ -1,4 +1,4 @@
-const CACHE_NAME = "peace-public-shell-v10";
+const CACHE_NAME = "peace-public-shell-v11";
 const APP_SHELL = ["/offline.html", "/manifest.json", "/pcg-connect-mark.svg"];
 const PRIVATE_PREFIXES = ["/admin", "/api", "/auth", "/account", "/login"];
 const STATIC_PREFIXES = ["/_next/static/", "/ministry-logos/"];
@@ -29,9 +29,21 @@ self.addEventListener("fetch", (event) => {
       const cache = await caches.open(CACHE_NAME);
       try {
         const response = await fetch(request);
-        const cacheControl = response.headers.get("Cache-Control") || "";
-        if (response.ok && !response.headers.has("Set-Cookie")) {
-          await cache.put(new Request(url.origin + url.pathname), response.clone());
+        const cacheControl = (response.headers.get("Cache-Control") || "").toLowerCase();
+        const cacheKey = new Request(url.origin + url.pathname);
+        const contentType = (response.headers.get("Content-Type") || "").toLowerCase();
+        const explicitlyPrivate = cacheControl.includes("no-store") || cacheControl.includes("private");
+        if (explicitlyPrivate || response.headers.has("Set-Cookie")) {
+          await cache.delete(cacheKey);
+          return response;
+        }
+        if (response.ok && response.status === 200 && contentType.includes("text/html") && response.type === "basic") {
+          await cache.put(cacheKey, response.clone());
+          const keys = await cache.keys();
+          const pageKeys = keys.filter((key) => new URL(key.url).origin === self.location.origin);
+          for (const staleKey of pageKeys.slice(0, Math.max(0, pageKeys.length - 40))) {
+            await cache.delete(staleKey);
+          }
         }
         return response;
       } catch {
