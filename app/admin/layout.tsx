@@ -4,6 +4,7 @@ import "./admin.css";
 const links=[
  {label:"Overview",href:"/admin",icon:"layout-dashboard"},
  {label:"Members",href:"/admin/members",icon:"users"},
+ {label:"Website content",href:"/admin/content",icon:"panels-top-left"},
  {label:"Visitors",href:"/admin/visitors",icon:"user-plus"},
  {label:"Management",href:"/admin/management",icon:"settings"},
  {label:"Quick desk",href:"/admin/quick-desk",icon:"clipboard-list"},
