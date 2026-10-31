@@ -40,7 +40,20 @@ export default function AdminDashboard(){
   e.preventDefault();setBusy(true);setError("");setNotice("");
   const {error}=await supabase.auth.signInWithPassword({email:email.trim(),password});
   if(error)setError(error.message);
-  else {setAuthorized(true);setNotice("Signed in successfully.");}
+  else {
+   const {data:{session}}=await supabase.auth.getSession();
+   const {data:admin,error:adminError}=await supabase.from("church_admins").select("user_id").eq("user_id",session?.user.id||"").maybeSingle();
+   if(adminError||!admin){
+    await supabase.auth.signOut();
+    setError("This account is not approved for administrator access.");
+   } else {
+    setAuthorized(true);
+    const {error:alertError}=await supabase.functions.invoke("admin-login-alert");
+    setNotice(alertError
+     ?"Signed in successfully. The login alert could not be sent; email delivery still needs configuration."
+     :"Signed in successfully. A login alert has been sent to the project owner.");
+   }
+  }
   setBusy(false);
  }
  async function signOut(){await supabase.auth.signOut();setAuthorized(false);setEmail("");setPassword("");setNotice("Signed out.");}
