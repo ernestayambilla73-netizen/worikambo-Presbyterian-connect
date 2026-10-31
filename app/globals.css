@@ -694,3 +694,7 @@ button{transition:background-color .18s ease,border-color .18s ease,box-shadow .
 .system-state-icon{width:64px;height:64px;margin:22px auto 12px;display:grid;place-items:center;border-radius:18px;background:#edf3fa;color:#174b91}
 .system-state-card .btn{min-height:46px}
 .system-state-home{display:block;margin-top:16px;color:#174b91;font-size:13px;font-weight:750}
+
+
+/* Public pages and administration are deliberately separate visual shells. */
+.admin-portal{isolation:isolate}.public-site-shell{min-height:100vh}

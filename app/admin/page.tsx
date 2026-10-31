@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "../../lib/supabase/client";
-import QuickAccess from "../../components/QuickAccess";
+
 
 type Row = Record<string, any>;
 type Field = { key: string; label: string; type?: string; required?: boolean; options?: string[] };

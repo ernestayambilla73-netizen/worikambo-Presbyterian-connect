@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import MinistryLogo from "../components/MinistryLogo";
-import GalleryDownloadButton from "../components/GalleryDownloadButton";
-import WhatsAppContactForm from "../components/WhatsAppContactForm";
-import { createClient } from "../../lib/supabase/server";
+import MinistryLogo from "../../components/MinistryLogo";
+import GalleryDownloadButton from "../../components/GalleryDownloadButton";
+import WhatsAppContactForm from "../../components/WhatsAppContactForm";
+import { createClient } from "../../../lib/supabase/server";
 type Props={params:Promise<{section:string}>};
 type MinistryLogo={src?:string;label:string;alt:string};
 const ministryLogos:Record<string,MinistryLogo>={

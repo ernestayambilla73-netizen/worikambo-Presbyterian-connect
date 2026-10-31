@@ -1,6 +1,6 @@
-import { createClient } from "../lib/supabase/server";
-import Icon from "../components/Icon";
-import HeroSlideshow from "./components/HeroSlideshow";
+import { createClient } from "../../lib/supabase/server";
+import Icon from "../.../components/Icon";
+import HeroSlideshow from "../components/HeroSlideshow";
 const cards = [
   {icon:"church",title:"Worship at Peace Congregation",text:"Find our worship times, church location and contact information for your visit.",href:"/contact",cta:"Plan your visit",number:"01"},
   {icon:"cross",title:"Church Groups",text:"Discover a place to belong through Children’s Service, JY, YPG, YAF and adult fellowships.",href:"/ministries",cta:"Explore ministries",number:"02"},
