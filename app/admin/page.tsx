@@ -9,8 +9,7 @@ const sections = [
  {title:"Visitors",description:"Register visitors and manage follow-up.",href:"/admin/visitors",icon:"02"},
  {title:"Daily church work",description:"Attendance, finance and record lookup.",href:"/admin/quick-desk",icon:"03"},
  {title:"Church management",description:"Events, pastoral care, prayer requests and church records.",href:"/admin/management",icon:"04"},
- {title:"Website content",description:"Manage the homepage, gallery, news, ministries and resources.",href:"/admin/content",icon:"05"},
- {title:"Data backups",description:"Export a secure copy of church database records.",href:"/admin/backup",icon:"06"}
+ {title:"Data backups",description:"Export a secure copy of church database records.",href:"/admin/backup",icon:"05"}
 ];
 
 export default function AdminDashboard(){
