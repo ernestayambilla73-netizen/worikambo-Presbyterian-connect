@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import InstallApp from "./components/InstallApp";
 import WelcomeNotification from "./components/WelcomeNotification";
-import QuickAccess from "../components/QuickAccess";
 import Icon from "../components/Icon";
 
 export const metadata: Metadata = {
@@ -44,7 +43,6 @@ export default function PublicLayout({ children }: Readonly<{ children: React.Re
         {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
         <a className="nav-cta" href="/contact">Plan a Visit <Icon name="arrow-up-right" size={15} /></a>
       </nav>
-      <QuickAccess />
     </div></header>
     <div id="main-content">{children}</div>
     <InstallApp />
